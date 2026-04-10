@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BR-001 — Peptide Brand Ecommerce · Upwork Project Brief</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,600;1,300;1,600&display=swap" rel="stylesheet">
+  <style>
+    /* ─── RESET ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ─── DESIGN TOKENS ─────────────────────── */
+    :root {
+      --bg:         #FAFAF7;
+      --sf1:        #F2F2EE;
+      --sf2:        #E8E8E2;
+      --ink:        #101010;
+      --ink2:       #3E3E3E;
+      --ink3:       #888880;
+      --accent:     #1547C0;
+      --accent-bg:  #EEF1FB;
+      --accent-mid: rgba(21, 71, 192, 0.18);
+      --rule:       #DCDCD4;
+
+      --f-serif: 'IBM Plex Serif', Georgia, serif;
+      --f-sans:  'IBM Plex Sans', system-ui, sans-serif;
+      --f-mono:  'IBM Plex Mono', 'Courier New', monospace;
+
+      --max-w:   1060px;
+      --side-w:  264px;
+      --gap:     48px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--f-sans);
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── SCROLL PROGRESS ───────────────────── */
+    .scroll-prog {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: var(--accent);
+      width: 0%;
+      z-index: 1000;
+      transition: width 0.08s linear;
+    }
+
+    /* ─── DOC STRIP ─────────────────────────── */
+    .doc-strip {
+      background: var(--ink);
+      color: #fff;
+      font-family: var(--f-mono);
+      font-size: 11px;
+      letter-spacing: 0.09em;
+      padding: 9px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .doc-strip span { opacity: 0.5; }
+    .doc-strip strong { opacity: 1; color: #fff; }
+    .doc-strip .strip-badge {
+      background: var(--accent);
+      color: #fff;
+      opacity: 1;
+      padding: 2px 10px;
+      border-radius: 2px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── PAGE HEADER ───────────────────────── */
+    .page-header {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 64px 40px 48px;
+      display: grid;
+      grid-template-columns: var(--side-w) 1fr;
+      gap: var(--gap);
+      border-bottom: 1px solid var(--rule);
+    }
+    .header-meta {
+      padding-top: 6px;
+      border-top: 2px solid var(--ink);
+    }
+    .header-meta .meta-top-label {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 28px;
+      display: block;
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 18px;
+    }
+    .meta-item .ml {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--ink3);
+    }
+    .meta-item .mv {
+      font-family: var(--f-mono);
+      font-size: 13px;
+      color: var(--ink2);
+      font-weight: 500;
+    }
+    .meta-item .mv.blue { color: var(--accent); }
+
+    .header-title {}
+    .header-title h1 {
+      font-family: var(--f-serif);
+      font-size: clamp(38px, 5.2vw, 62px);
+      font-weight: 600;
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 24px;
+    }
+    .header-title h1 em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--ink2);
+    }
+    .header-title .sub {
+      font-size: 15px;
+      color: var(--ink2);
+      line-height: 1.65;
+      max-width: 480px;
+      border-left: 2px solid var(--accent);
+      padding-left: 16px;
+    }
+
+    /* ─── MAIN LAYOUT ───────────────────────── */
+    .main-wrap {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: var(--side-w) 1fr;
+      gap: var(--gap);
+    }
+
+    /* ─── SIDEBAR ───────────────────────────── */
+    .sidebar {
+      padding-top: 48px;
+      padding-bottom: 80px;
+    }
+    .s-card {
+      background: var(--sf1);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .s-card .s-label {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      display: block;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .s-row {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 12px;
+    }
+    .s-row:last-child { margin-bottom: 0; }
+    .s-row .rk {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink3);
+    }
+    .s-row .rv {
+      font-size: 13px;
+      color: var(--ink2);
+      font-weight: 500;
+    }
+
+    .feat-list {
+      list-style: none;
+      padding: 0;
+    }
+    .feat-list li {
+      font-size: 13px;
+      color: var(--ink2);
+      padding: 7px 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .feat-list li:last-child { border-bottom: none; }
+    .feat-list li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .niche-note {
+      font-size: 12px;
+      color: var(--ink2);
+      line-height: 1.6;
+    }
+
+    /* ─── CONTENT ───────────────────────────── */
+    .content {
+      padding-top: 48px;
+      padding-bottom: 80px;
+    }
+
+    .sec-label {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 6px;
+    }
+    .sec-title {
+      font-family: var(--f-serif);
+      font-size: 26px;
+      font-weight: 600;
+      line-height: 1.22;
+      color: var(--ink);
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    /* ─── OVERVIEW ──────────────────────────── */
+    .overview-block {
+      margin-bottom: 56px;
+    }
+    .overview-text {
+      font-family: var(--f-serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--ink2);
+      max-width: 560px;
+    }
+
+    /* ─── SCOPE ─────────────────────────────── */
+    .scope-block {
+      margin-bottom: 56px;
+    }
+    .scope-grid {
+      display: flex;
+      flex-direction: column;
+    }
+    .scope-item {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 20px;
+      padding: 26px 0;
+      border-bottom: 1px solid var(--rule);
+      /* animate in */
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    .scope-item:first-child { border-top: 1px solid var(--rule); }
+    .scope-item.vis { opacity: 1; transform: none; }
+
+    .scope-num {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      color: var(--ink3);
+      padding-top: 2px;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+    .scope-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 5px;
+      letter-spacing: 0.01em;
+    }
+    .scope-desc {
+      font-size: 13.5px;
+      color: var(--ink2);
+      line-height: 1.65;
+    }
+    .scope-tag {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--f-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.1em;
+      background: var(--accent-bg);
+      color: var(--accent);
+      border: 1px solid var(--accent-mid);
+      border-radius: 2px;
+      padding: 2px 8px;
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
+
+    /* ─── TERMS ─────────────────────────────── */
+    .terms-block {
+      margin-bottom: 56px;
+    }
+    .terms-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .terms-table tr:first-child td { border-top: 1px solid var(--rule); }
+    .terms-table td {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--rule);
+      vertical-align: top;
+    }
+    .terms-table td:first-child {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      width: 160px;
+      white-space: nowrap;
+    }
+    .terms-table td:last-child {
+      color: var(--ink2);
+      font-weight: 500;
+    }
+    .terms-table td.big-val {
+      font-family: var(--f-mono);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--accent);
+      padding-top: 10px;
+    }
+    .terms-table tr.alert td:last-child {
+      color: #B03A00;
+      font-weight: 600;
+    }
+
+    /* ─── INSIGHT ───────────────────────────── */
+    .insight-block {
+      background: var(--ink);
+      color: #fff;
+      padding: 36px 36px 28px;
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+    .insight-block::before {
+      content: '"';
+      position: absolute;
+      top: -32px;
+      left: 16px;
+      font-family: var(--f-serif);
+      font-size: 200px;
+      color: rgba(255,255,255,0.04);
+      line-height: 1;
+      pointer-events: none;
+    }
+    .insight-warn {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .insight-warn::before {
+      content: '';
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #F5A623;
+      flex-shrink: 0;
+    }
+    .insight-text {
+      font-size: 15px;
+      line-height: 1.72;
+      color: rgba(255,255,255,0.88);
+      position: relative;
+      z-index: 1;
+      max-width: 580px;
+    }
+    .insight-copy-btn {
+      margin-top: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 2px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .insight-copy-btn:hover {
+      background: rgba(255,255,255,0.13);
+      color: #fff;
+    }
+    .insight-copy-btn.copied {
+      color: #4AD66D;
+      border-color: rgba(74, 214, 109, 0.35);
+      background: rgba(74, 214, 109, 0.07);
+    }
+
+    /* ─── PAGE FOOTER ───────────────────────── */
+    .page-footer {
+      border-top: 1px solid var(--rule);
+      padding: 20px 40px;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .page-footer span {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--ink3);
+    }
+
+    /* ─── RESPONSIVE ────────────────────────── */
+    @media (max-width: 800px) {
+      .doc-strip { padding: 8px 20px; }
+      .doc-strip .strip-badge { display: none; }
+
+      .page-header,
+      .main-wrap {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+        gap: 0;
+      }
+      .page-header { padding: 40px 20px 32px; }
+      .header-meta { display: none; }
+
+      .sidebar {
+        padding-top: 32px;
+        padding-bottom: 0;
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .sidebar::-webkit-scrollbar { display: none; }
+      .s-card { min-width: 220px; flex-shrink: 0; }
+
+      .page-footer { padding: 20px; flex-direction: column; gap: 6px; text-align: center; }
+    }
+
+    /* ─── PRINT ──────────────────────────────── */
+    @media print {
+      .scroll-prog, .insight-copy-btn { display: none !important; }
+      .scope-item { opacity: 1 !important; transform: none !important; }
+      .doc-strip { background: #111 !important; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SCROLL PROGRESS -->
+  <div class="scroll-prog" id="scrollProg"></div>
+
+  <!-- ── DOC STRIP ──────────────────────────────── -->
+  <div class="doc-strip">
+    <span><strong>BR-001</strong> &nbsp;·&nbsp; UPWORK PROJECT BRIEF</span>
+    <span>POSTED: APRIL 10, 2026 &nbsp;·&nbsp; DEADLINE: APRIL 17, 2026</span>
+    <span class="strip-badge">NEW POST</span>
+  </div>
+
+  <!-- ── PAGE HEADER ────────────────────────────── -->
+  <header class="page-header">
+    <div class="header-meta">
+      <span class="meta-top-label">Project Metadata</span>
+
+      <div class="meta-item">
+        <span class="ml">Client</span>
+        <span class="mv">New UK Peptide Brand</span>
+      </div>
+      <div class="meta-item">
+        <span class="ml">Industry</span>
+        <span class="mv">Research Compounds</span>
+      </div>
+      <div class="meta-item">
+        <span class="ml">Budget</span>
+        <span class="mv blue">$536 Fixed</span>
+      </div>
+      <div class="meta-item">
+        <span class="ml">Deadline</span>
+        <span class="mv">April 17, 2026</span>
+      </div>
+      <div class="meta-item">
+        <span class="ml">Post Status</span>
+        <span class="mv">Brand New · First Mover</span>
+      </div>
+    </div>
+
+    <div class="header-title">
+      <h1>Peptide Brand<br><em>Ecommerce</em><br>Website</h1>
+      <p class="sub">A new UK-based research compound brand requiring a professional, compliance-aware ecommerce buildout with animation-driven monochrome UI.</p>
+    </div>
+  </header>
+
+  <!-- ── MAIN LAYOUT ────────────────────────────── -->
+  <div class="main-wrap">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="s-card">
+        <span class="s-label">Brand Details</span>
+        <div class="s-row">
+          <span class="rk">Visual Identity</span>
+          <span class="rv">Monochrome</span>
+        </div>
+        <div class="s-row">
+          <span class="rk">Tone</span>
+          <span class="rv">Premium · Clinical</span>
+        </div>
+        <div class="s-row">
+          <span class="rk">Palette</span>
+          <span class="rv">Black / White / Grey</span>
+        </div>
+        <div class="s-row">
+          <span class="rk">Location</span>
+          <span class="rv">United Kingdom</span>
+        </div>
+        <div class="s-row">
+          <span class="rk">UI Style</span>
+          <span class="rv">Animation-driven</span>
+        </div>
+      </div>
+
+      <div class="s-card">
+        <span class="s-label">Required Features</span>
+        <ul class="feat-list">
+          <li>Payment Integration (Walid)</li>
+          <li>User Authentication</li>
+          <li>Inventory Management</li>
+          <li>Newsletter / Email Capture</li>
+          <li>Marketing Integrations</li>
+          <li>Compliance Age Gate</li>
+          <li>Crypto Payment Ready</li>
+        </ul>
+      </div>
+
+      <div class="s-card">
+        <span class="s-label">Niche Note</span>
+        <p class="niche-note">Products marketed under "research purposes only" — standard UK regulatory compliance for peptide vendors. Proposal must address this explicitly.</p>
+      </div>
+
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <!-- CLIENT OVERVIEW -->
+      <section class="overview-block">
+        <span class="sec-label">— Client Overview</span>
+        <h2 class="sec-title">Project Background</h2>
+        <p class="overview-text">A new UK-based peptide brand launching its professional ecommerce presence. The brand identity revolves around a monochrome aesthetic elevated by dynamic, animation-driven UI elements designed to engage and convert visitors in a tightly regulated niche.</p>
+      </section>
+
+      <!-- SCOPE OF WORK -->
+      <section class="scope-block">
+        <span class="sec-label">— Scope of Work</span>
+        <h2 class="sec-title">Six Deliverables</h2>
+
+        <div class="scope-grid" id="scopeGrid">
+
+          <div class="scope-item">
+            <span class="scope-num">01 —</span>
+            <div>
+              <p class="scope-title">Ecommerce &amp; Payments</p>
+              <p class="scope-desc">Fully functional ecommerce store integrated with the Walid payment platform. Architecture must support future crypto payment options with minimal rework to the existing codebase.</p>
+              <span class="scope-tag">Critical Path</span>
+            </div>
+          </div>
+
+          <div class="scope-item">
+            <span class="scope-num">02 —</span>
+            <div>
+              <p class="scope-title">Compliance Gate</p>
+              <p class="scope-desc">Opt-in agreement displayed before any site access — confirming the user is 18+ and acknowledges products are for research purposes only. Legal requirement for this niche in the UK.</p>
+              <span class="scope-tag">Regulatory Requirement</span>
+            </div>
+          </div>
+
+          <div class="scope-item">
+            <span class="scope-num">03 —</span>
+            <div>
+              <p class="scope-title">Inventory &amp; Stock Display</p>
+              <p class="scope-desc">Real-time stock level references on product pages — In Stock / Low Stock / Out of Stock — so customers always know current availability before making a purchase decision.</p>
+              <span class="scope-tag">Product UX</span>
+            </div>
+          </div>
+
+          <div class="scope-item">
+            <span class="scope-num">04 —</span>
+            <div>
+              <p class="scope-title">Email Capture &amp; Marketing</p>
+              <p class="scope-desc">Newsletter signup and email capture flows across the full site — homepage, checkout, and out-of-stock triggers — to build the brand's ongoing marketing list from day one.</p>
+              <span class="scope-tag">Marketing</span>
+            </div>
+          </div>
+
+          <div class="scope-item">
+            <span class="scope-num">05 —</span>
+            <div>
+              <p class="scope-title">Animations &amp; Dynamic Elements</p>
+              <p class="scope-desc">Slick, eye-catching animations throughout: scroll-triggered reveals, smooth page transitions, and hover effects — all consistent with the monochrome brand theme and premium feel.</p>
+              <span class="scope-tag">Brand Experience</span>
+            </div>
+          </div>
+
+          <div class="scope-item">
+            <span class="scope-num">06 —</span>
+            <div>
+              <p class="scope-title">User Authentication</p>
+              <p class="scope-desc">Full customer account system — login, registration, and order history. Secure, standard authentication patterns suited for regulated ecommerce.</p>
+              <span class="scope-tag">Accounts</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- PROJECT TERMS -->
+      <section class="terms-block">
+        <span class="sec-label">— Engagement Details</span>
+        <h2 class="sec-title">Project Terms</h2>
+
+        <table class="terms-table">
+          <tr>
+            <td>Budget</td>
+            <td class="big-val">$536</td>
+          </tr>
+          <tr>
+            <td>Contract Type</td>
+            <td>Fixed Price</td>
+          </tr>
+          <tr class="alert">
+            <td>Deadline</td>
+            <td>April 17, 2026 — 7 days from posting</td>
+          </tr>
+          <tr>
+            <td>Post Status</td>
+            <td>Brand New — Be First to Respond</td>
+          </tr>
+          <tr>
+            <td>Client Location</td>
+            <td>United Kingdom</td>
+          </tr>
+          <tr>
+            <td>Payment Platform</td>
+            <td>Walid (+ crypto-ready architecture)</td>
+          </tr>
+        </table>
+      </section>
+
+      <!-- KEY INSIGHT -->
+      <section>
+        <span class="sec-label">— Proposal Strategy</span>
+        <h2 class="sec-title">Key Insight for Winning</h2>
+
+        <div class="insight-block">
+          <div class="insight-warn">Niche Awareness — Read Before Writing Proposal</div>
+          <p class="insight-text" id="insightText">This is a regulated niche. Peptides sold online in the UK are marketed under a "research purposes only" disclaimer to comply with legal restrictions. The freelancer must understand this context and reflect it in the opt-in gate, product descriptions, and overall site tone. A generic ecommerce proposal will not win this — the winning reply must show niche awareness.</p>
+          <button class="insight-copy-btn" id="copyBtn" onclick="copyInsight()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Insight
+          </button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ── PAGE FOOTER ─────────────────────────────── -->
+  <footer class="page-footer">
+    <span>BR-001 · Peptide Brand Ecommerce · Upwork Project Brief</span>
+    <span>Generated: April 10, 2026</span>
+  </footer>
+
+  <script>
+    // ── Scroll progress bar
+    const prog = document.getElementById('scrollProg');
+    window.addEventListener('scroll', () => {
+      const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+      prog.style.width = Math.min(pct, 100) + '%';
+    }, { passive: true });
+
+    // ── Scope items staggered reveal
+    const items = Array.from(document.querySelectorAll('.scope-item'));
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const idx = items.indexOf(entry.target);
+          setTimeout(() => entry.target.classList.add('vis'), idx * 75);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    items.forEach(el => obs.observe(el));
+
+    // ── Copy insight to clipboard
+    function copyInsight() {
+      const text = document.getElementById('insightText').textContent.trim();
+      const btn = document.getElementById('copyBtn');
+      const original = btn.innerHTML;
+
+      navigator.clipboard.writeText(text).then(() => {
+        btn.classList.add('copied');
+        btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Copied`;
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = original;
+        }, 2200);
+      }).catch(() => {
+        // Fallback for older browsers
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.classList.add('copied');
+        btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied`;
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = original;
+        }, 2200);
+      });
+    }
+  </script>
+</body>
+</html>

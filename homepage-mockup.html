@@ -1,0 +1,2324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APEX Peptides — UK Research Compounds</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════════
+       RESET
+    ══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img  { display: block; max-width: 100%; }
+    a    { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul   { list-style: none; }
+
+    /* ══════════════════════════════════════════
+       DESIGN TOKENS
+    ══════════════════════════════════════════ */
+    :root {
+      /* Light palette (main) */
+      --bg:          #F8F8F6;
+      --surface:     #FFFFFF;
+      --surface-2:   #F0F0EE;
+      --surface-3:   #E6E6E2;
+      --border:      #DEDED8;
+      --border-2:    #C4C4BE;
+
+      /* Type */
+      --ink:         #111111;
+      --ink-2:       #3D3D3B;
+      --ink-3:       #787874;
+      --ink-4:       #ABABAB;
+
+      /* Dark sections */
+      --dark-bg:     #0D0D0B;
+      --dark-sf:     #191916;
+      --dark-border: rgba(255,255,255,0.09);
+      --dark-text:   #F0F0EE;
+      --dark-text-2: rgba(240,240,238,0.58);
+
+      /* Functional only (stock status) */
+      --green:  #1A6B3A;
+      --amber:  #8A5200;
+      --red:    #8B1A1A;
+      --green-bg: rgba(26,107,58,0.08);
+      --amber-bg: rgba(138,82,0,0.08);
+      --red-bg:   rgba(139,26,26,0.08);
+
+      /* Typography */
+      --f-serif: 'Cormorant Garamond', Georgia, serif;
+      --f-sans:  'Inter', system-ui, sans-serif;
+      --f-mono:  'Space Mono', 'Courier New', monospace;
+
+      /* Spacing (4px grid) */
+      --sp-4:   4px;
+      --sp-8:   8px;
+      --sp-12:  12px;
+      --sp-16:  16px;
+      --sp-24:  24px;
+      --sp-32:  32px;
+      --sp-48:  48px;
+      --sp-64:  64px;
+      --sp-96:  96px;
+      --sp-128: 128px;
+
+      /* Border radius — sharp, clinical */
+      --r: 2px;
+      --r-sm: 0px;
+    }
+
+    /* ══════════════════════════════════════════
+       BASE
+    ══════════════════════════════════════════ */
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--f-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-2); }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--sp-48);
+    }
+    @media (max-width: 768px) {
+      .container { padding: 0 var(--sp-20, 20px); }
+    }
+
+    /* ── Scroll reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.vis { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ══════════════════════════════════════════
+       COMPLIANCE GATE
+    ══════════════════════════════════════════ */
+    .gate {
+      position: fixed;
+      inset: 0;
+      background: #F8F8F6;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-32) var(--sp-16);
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    .gate.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .gate-inner {
+      max-width: 440px;
+      width: 100%;
+    }
+    .gate-logo {
+      font-family: var(--f-mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: var(--sp-32);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-12);
+    }
+    .gate-logo-mark {
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .gate-rule { height: 1px; background: var(--border); margin-bottom: var(--sp-32); }
+    .gate-alert {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-8);
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: var(--sp-12);
+    }
+    .gate-alert-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--red);
+      flex-shrink: 0;
+    }
+    .gate-title {
+      font-family: var(--f-serif);
+      font-size: 38px;
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: var(--sp-12);
+    }
+    .gate-sub {
+      font-size: 13px;
+      color: var(--ink-3);
+      line-height: 1.65;
+      margin-bottom: var(--sp-32);
+    }
+    .gate-checks {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-12);
+      margin-bottom: var(--sp-32);
+    }
+    .gate-check {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--sp-12);
+      cursor: pointer;
+    }
+    .gate-check input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin-top: 1px;
+      flex-shrink: 0;
+      accent-color: var(--ink);
+      cursor: pointer;
+      border: 1px solid var(--border-2);
+    }
+    .gate-check label {
+      font-size: 13px;
+      color: var(--ink-2);
+      line-height: 1.55;
+      cursor: pointer;
+    }
+    .gate-enter {
+      width: 100%;
+      padding: 15px var(--sp-24);
+      background: var(--ink);
+      color: var(--bg);
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      margin-bottom: var(--sp-12);
+      opacity: 0.25;
+    }
+    .gate-enter.active       { opacity: 1; }
+    .gate-enter.active:hover { background: #333; }
+    .gate-exit {
+      display: block;
+      text-align: center;
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-4);
+      cursor: pointer;
+      background: none;
+      border: none;
+      text-decoration: underline;
+      width: 100%;
+    }
+    .gate-legal {
+      margin-top: var(--sp-24);
+      padding-top: var(--sp-24);
+      border-top: 1px solid var(--border);
+      font-size: 10px;
+      color: var(--ink-4);
+      line-height: 1.6;
+    }
+
+    /* ══════════════════════════════════════════
+       ANNOUNCEMENT STRIP
+    ══════════════════════════════════════════ */
+    .announcement {
+      background: var(--ink);
+      color: var(--dark-text);
+      padding: var(--sp-8);
+      overflow: hidden;
+    }
+    .ann-track {
+      display: flex;
+      gap: 0;
+      animation: annScroll 28s linear infinite;
+      white-space: nowrap;
+    }
+    .ann-item {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-24);
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(240,240,238,0.7);
+      padding-right: var(--sp-64);
+      flex-shrink: 0;
+    }
+    .ann-item strong { color: var(--dark-text); }
+    .ann-sep {
+      display: inline-block;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(240,240,238,0.3);
+      vertical-align: middle;
+      margin: 0 var(--sp-24);
+    }
+    @keyframes annScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ══════════════════════════════════════════
+       NAV
+    ══════════════════════════════════════════ */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(248,248,246,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.3s ease;
+    }
+    .nav.scrolled { box-shadow: 0 2px 24px rgba(17,17,17,0.08); }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      height: 68px;
+      gap: var(--sp-32);
+    }
+    .nav-logo {
+      font-family: var(--f-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: var(--sp-8);
+    }
+    .nav-logo-mark {
+      width: 22px;
+      height: 22px;
+      border: 1.5px solid var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-logo-mark svg { display: block; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-4);
+      flex: 1;
+    }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-3);
+      padding: var(--sp-8) var(--sp-12);
+      transition: color 0.2s;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-12);
+      flex-shrink: 0;
+    }
+    .nav-research-tag {
+      font-family: var(--f-mono);
+      font-size: 8.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-4);
+      border: 1px solid var(--border);
+      padding: 4px 9px;
+    }
+    .nav-account {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      color: var(--ink-3);
+      transition: color 0.2s, border-color 0.2s;
+      cursor: pointer;
+    }
+    .nav-account:hover { color: var(--ink); border-color: var(--border-2); }
+    .nav-cart {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-8);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      background: var(--ink);
+      color: var(--bg);
+      padding: var(--sp-8) var(--sp-16);
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .nav-cart:hover { background: #333; }
+    .nav-cart-count {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      background: var(--bg);
+      color: var(--ink);
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-research-tag { display: none; }
+    }
+
+    /* ══════════════════════════════════════════
+       HERO  (dark, full viewport)
+    ══════════════════════════════════════════ */
+    .hero {
+      background: var(--dark-bg);
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* hero bg image + grid dots */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=1800&q=60&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center right;
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero-left {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: var(--sp-96) var(--sp-64) var(--sp-96) var(--sp-64);
+    }
+    .hero-eyebrow {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: rgba(240,240,238,0.45);
+      margin-bottom: var(--sp-32);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-12);
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: rgba(240,240,238,0.3);
+      flex-shrink: 0;
+    }
+    .hero-title {
+      font-family: var(--f-serif);
+      font-size: clamp(52px, 5.5vw, 84px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 0.95;
+      letter-spacing: -0.025em;
+      color: var(--dark-text);
+      margin-bottom: var(--sp-8);
+    }
+    .hero-title strong {
+      font-style: normal;
+      font-weight: 600;
+      display: block;
+    }
+    .hero-divider {
+      width: 48px;
+      height: 1px;
+      background: rgba(240,240,238,0.25);
+      margin: var(--sp-32) 0;
+    }
+    .hero-sub {
+      font-size: 16px;
+      line-height: 1.72;
+      color: rgba(240,240,238,0.62);
+      max-width: 420px;
+      margin-bottom: var(--sp-48);
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-12);
+      flex-wrap: wrap;
+    }
+    .btn-hero-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-8);
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dark-bg);
+      background: var(--dark-text);
+      padding: 14px 28px;
+      transition: background 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .btn-hero-primary:hover { background: #d0d0ce; transform: translateY(-2px); }
+    .btn-hero-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-8);
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(240,240,238,0.55);
+      padding: 14px 28px;
+      border: 1px solid rgba(240,240,238,0.18);
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .btn-hero-ghost:hover { color: var(--dark-text); border-color: rgba(240,240,238,0.4); transform: translateY(-2px); }
+
+    .hero-right {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-64);
+      border-left: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* Product specimen card cluster */
+    .hero-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-16);
+      width: 100%;
+      max-width: 360px;
+    }
+    .hero-card {
+      background: var(--dark-sf);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: var(--sp-20, 20px);
+      position: relative;
+      overflow: hidden;
+      animation: heroCardFloat 4s ease-in-out infinite alternate;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-8);
+    }
+    .hero-card-img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: contain;
+      margin-bottom: var(--sp-8);
+      filter: brightness(0.9);
+      transition: transform 0.4s ease;
+    }
+    .hero-card:hover .hero-card-img { transform: scale(1.05) translateY(-3px); }
+    .hero-card:nth-child(2) { animation-delay: 0.8s; margin-top: 24px; }
+    .hero-card:nth-child(3) { animation-delay: 1.6s; }
+    .hero-card:nth-child(4) { animation-delay: 2.4s; margin-top: -24px; }
+    @keyframes heroCardFloat {
+      from { transform: translateY(0px); }
+      to   { transform: translateY(-8px); }
+    }
+    .hero-card-code {
+      font-family: var(--f-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(240,240,238,0.35);
+      margin-bottom: var(--sp-8);
+    }
+    .hero-card-name {
+      font-family: var(--f-serif);
+      font-size: 16px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--dark-text);
+      line-height: 1.25;
+      margin-bottom: var(--sp-12);
+    }
+    .hero-card-purity {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: rgba(240,240,238,0.5);
+    }
+    .hero-card-purity strong {
+      color: var(--dark-text);
+      font-weight: 700;
+    }
+    .hero-card-thumb {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 48px;
+      height: 48px;
+      border-left: 1px solid rgba(255,255,255,0.06);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.2;
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 80px 24px 64px; }
+    }
+
+    /* ══════════════════════════════════════════
+       TICKER
+    ══════════════════════════════════════════ */
+    .ticker {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: var(--sp-12) 0;
+      overflow: hidden;
+    }
+    .ticker-track {
+      display: flex;
+      gap: 0;
+      animation: tickerScroll 32s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-20, 20px);
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      padding: 0 var(--sp-32);
+      flex-shrink: 0;
+    }
+    .ticker-item strong { color: var(--ink); }
+    .ticker-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--border-2);
+      flex-shrink: 0;
+    }
+    @keyframes tickerScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ══════════════════════════════════════════
+       STATS (editorial large numbers)
+    ══════════════════════════════════════════ */
+    .stats {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: var(--sp-64) 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .stat-item {
+      padding: 0 var(--sp-32);
+      border-right: 1px solid var(--border);
+      text-align: left;
+    }
+    .stat-item:first-child { padding-left: 0; }
+    .stat-item:last-child  { border-right: none; }
+    .stat-num {
+      font-family: var(--f-serif);
+      font-size: clamp(52px, 5vw, 76px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: var(--sp-12);
+    }
+    .stat-num sup {
+      font-size: 0.45em;
+      vertical-align: super;
+      font-style: normal;
+    }
+    .stat-label {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-4);
+      display: block;
+      margin-bottom: var(--sp-4);
+    }
+    .stat-desc {
+      font-size: 13px;
+      color: var(--ink-3);
+    }
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .stat-item { padding: var(--sp-24); border: none; border-bottom: 1px solid var(--border); }
+    }
+
+    /* ══════════════════════════════════════════
+       CATEGORIES
+    ══════════════════════════════════════════ */
+    .categories {
+      background: var(--bg);
+      padding: var(--sp-96) 0;
+    }
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: var(--sp-48);
+      gap: var(--sp-32);
+    }
+    .section-eyebrow {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--ink-4);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-8);
+      margin-bottom: var(--sp-12);
+    }
+    .section-eyebrow::before {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: var(--border-2);
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-family: var(--f-serif);
+      font-size: clamp(30px, 3.5vw, 44px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+    .section-title strong { font-style: normal; font-weight: 600; }
+    .section-link {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-8);
+      transition: color 0.2s;
+      cursor: pointer;
+      flex-shrink: 0;
+      padding-bottom: 2px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-link:hover { color: var(--ink); border-color: var(--ink); }
+    .section-link .arrow { transition: transform 0.2s; }
+    .section-link:hover .arrow { transform: translateX(3px); }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-16);
+    }
+    .cat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: var(--sp-32);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .cat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--ink);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .cat-card:hover { border-color: var(--border-2); transform: translateY(-2px); }
+    .cat-card:hover::before { transform: scaleX(1); }
+    .cat-icon {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--sp-24);
+      color: var(--ink-3);
+    }
+    .cat-name {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: var(--sp-8);
+    }
+    .cat-desc {
+      font-size: 14px;
+      color: var(--ink-3);
+      line-height: 1.65;
+      margin-bottom: var(--sp-16);
+    }
+    .cat-count {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-4);
+    }
+    @media (max-width: 768px) {
+      .cat-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════════════════════
+       PRODUCTS
+    ══════════════════════════════════════════ */
+    .products {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: var(--sp-96) 0;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-12);
+    }
+
+    .prod-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      position: relative;
+    }
+    .prod-card:hover {
+      border-color: var(--border-2);
+      box-shadow: 0 8px 32px rgba(17,17,17,0.08);
+    }
+
+    /* Product visual area */
+    .prod-visual {
+      aspect-ratio: 1;
+      background: var(--surface-3);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .prod-visual img {
+      width: 78%;
+      height: 78%;
+      object-fit: contain;
+      display: block;
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+      filter: drop-shadow(0 8px 24px rgba(17,17,17,0.10));
+    }
+    .prod-card:hover .prod-visual img { transform: scale(1.06) translateY(-4px); }
+
+    /* hover overlay */
+    .prod-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(17,17,17,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .prod-card:hover .prod-overlay { opacity: 1; }
+    .prod-overlay-btn {
+      font-family: var(--f-mono);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dark-bg);
+      background: var(--dark-text);
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .prod-overlay-btn:hover { background: #d0d0ce; }
+
+    /* Badges */
+    .prod-badge {
+      position: absolute;
+      top: var(--sp-12);
+      left: var(--sp-12);
+      font-family: var(--f-mono);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+    }
+    .badge-new  { background: var(--ink); color: var(--bg); }
+    .badge-pop  { background: var(--surface); color: var(--ink); border: 1px solid var(--border-2); }
+    .badge-lim  { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(138,82,0,0.2); }
+
+    /* Product info */
+    .prod-info { padding: var(--sp-16); flex: 1; display: flex; flex-direction: column; }
+    .prod-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--sp-8);
+      margin-bottom: var(--sp-8);
+    }
+    .prod-name {
+      font-family: var(--f-serif);
+      font-size: 17px;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.2;
+      color: var(--ink);
+    }
+    .prod-purity {
+      font-family: var(--f-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.06em;
+      color: var(--ink-4);
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+    .prod-purity strong { color: var(--ink-2); }
+    .prod-use {
+      font-size: 12.5px;
+      color: var(--ink-3);
+      line-height: 1.5;
+      margin-bottom: var(--sp-12);
+      flex: 1;
+    }
+    .prod-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--sp-12);
+      border-top: 1px solid var(--border);
+      gap: var(--sp-8);
+    }
+    .prod-price {
+      font-family: var(--f-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .prod-stock {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--f-mono);
+      font-size: 8.5px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+    .prod-stock-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .stock-in   { color: var(--green); }
+    .stock-in .prod-stock-dot   { background: var(--green); }
+    .stock-low  { color: var(--amber); }
+    .stock-low .prod-stock-dot  { background: var(--amber); }
+    .stock-out  { color: var(--red); }
+    .stock-out .prod-stock-dot  { background: var(--red); }
+
+    @media (max-width: 900px) {
+      .products-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 540px) {
+      .products-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════════════════════
+       QUALITY / PURITY  (editorial 2-col)
+    ══════════════════════════════════════════ */
+    .quality {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: var(--sp-96) 0;
+    }
+    .quality-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-96);
+      align-items: center;
+    }
+    .quality-left {}
+    .quality-text {
+      font-size: 15.5px;
+      color: var(--ink-3);
+      line-height: 1.75;
+      margin-bottom: var(--sp-32);
+    }
+    .quality-points {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .quality-point {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: var(--sp-16);
+      padding: var(--sp-20, 20px) 0;
+      border-top: 1px solid var(--border);
+    }
+    .quality-point:last-child { border-bottom: 1px solid var(--border); }
+    .qp-num {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.10em;
+      color: var(--ink-4);
+      padding-top: 2px;
+    }
+    .qp-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: var(--sp-4);
+    }
+    .qp-desc {
+      font-size: 12.5px;
+      color: var(--ink-3);
+      line-height: 1.6;
+    }
+    .quality-right {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: var(--sp-48);
+    }
+    .lab-report {
+      border: 1px solid var(--border);
+      padding: var(--sp-24);
+      margin-bottom: var(--sp-24);
+    }
+    .lab-report-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: var(--sp-20, 20px);
+      gap: var(--sp-16);
+    }
+    .lab-report-compound {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+    .lab-report-date {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.10em;
+      color: var(--ink-4);
+    }
+    .lab-stamp {
+      font-family: var(--f-mono);
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green);
+      border: 1px solid rgba(26,107,58,0.3);
+      padding: 3px 8px;
+      flex-shrink: 0;
+    }
+    .lab-bars {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-8);
+    }
+    .lab-bar-row { display: flex; align-items: center; gap: var(--sp-12); }
+    .lab-bar-label {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--ink-4);
+      width: 80px;
+      flex-shrink: 0;
+    }
+    .lab-bar-track {
+      flex: 1;
+      height: 3px;
+      background: var(--surface-3);
+    }
+    .lab-bar-fill {
+      height: 100%;
+      background: var(--ink);
+      width: 0%;
+      transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+    }
+    .lab-bar-val {
+      font-family: var(--f-mono);
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--ink);
+      width: 40px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .quality-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-8);
+      font-family: var(--f-mono);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--ink);
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+      border: none;
+    }
+    .quality-cta:hover { background: #333; }
+
+    @media (max-width: 860px) {
+      .quality-grid { grid-template-columns: 1fr; gap: var(--sp-48); }
+    }
+
+    /* ══════════════════════════════════════════
+       EMAIL CAPTURE
+    ══════════════════════════════════════════ */
+    .email-capture {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: var(--sp-96) 0;
+    }
+    .email-capture-inner {
+      max-width: 560px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .email-capture-inner .section-eyebrow {
+      justify-content: center;
+    }
+    .email-capture-inner .section-eyebrow::before { display: none; }
+    .email-capture-body {
+      font-size: 15px;
+      color: var(--ink-3);
+      line-height: 1.7;
+      margin-bottom: var(--sp-32);
+    }
+    .email-form {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border-2);
+      background: var(--bg);
+    }
+    .email-form input {
+      flex: 1;
+      padding: 14px var(--sp-20, 20px);
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: var(--f-sans);
+      font-size: 14px;
+      color: var(--ink);
+    }
+    .email-form input::placeholder { color: var(--ink-4); }
+    .email-form button {
+      font-family: var(--f-mono);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--ink);
+      padding: 14px 24px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .email-form button:hover { background: #333; }
+    .email-disclaimer {
+      margin-top: var(--sp-12);
+      font-size: 11px;
+      color: var(--ink-4);
+    }
+
+    /* ══════════════════════════════════════════
+       TESTIMONIALS
+    ══════════════════════════════════════════ */
+    .testimonials {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: var(--sp-96) 0;
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-16);
+      margin-top: var(--sp-48);
+    }
+    .review-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: var(--sp-32);
+      display: flex;
+      flex-direction: column;
+    }
+    .review-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: var(--sp-16);
+    }
+    .review-stars span {
+      font-size: 12px;
+      color: var(--ink-3);
+    }
+    .review-text {
+      font-family: var(--f-serif);
+      font-size: 17px;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--ink-2);
+      flex: 1;
+      margin-bottom: var(--sp-24);
+    }
+    .review-footer {
+      border-top: 1px solid var(--border);
+      padding-top: var(--sp-16);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-12);
+    }
+    .review-avatar {
+      width: 32px;
+      height: 32px;
+      background: var(--surface-3);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--f-mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--ink-3);
+      flex-shrink: 0;
+    }
+    .review-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .review-tag {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--ink-4);
+    }
+    .review-verified {
+      margin-left: auto;
+      font-family: var(--f-mono);
+      font-size: 8.5px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+    @media (max-width: 768px) {
+      .testimonials-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════════════════════
+       FINAL CTA  (dark)
+    ══════════════════════════════════════════ */
+    .final-cta {
+      background: var(--dark-bg);
+      padding: var(--sp-128) 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+    }
+    .final-cta-inner {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .final-cta-eyebrow {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(240,240,238,0.35);
+      margin-bottom: var(--sp-24);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-12);
+    }
+    .final-cta-eyebrow::before,
+    .final-cta-eyebrow::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: rgba(240,240,238,0.2);
+    }
+    .final-cta-title {
+      font-family: var(--f-serif);
+      font-size: clamp(38px, 4.5vw, 60px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.05;
+      color: var(--dark-text);
+      margin-bottom: var(--sp-20, 20px);
+    }
+    .final-cta-title strong { font-style: normal; font-weight: 600; }
+    .final-cta-sub {
+      font-size: 14px;
+      color: rgba(240,240,238,0.55);
+      margin-bottom: var(--sp-48);
+      line-height: 1.7;
+    }
+    .final-cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-12);
+      flex-wrap: wrap;
+    }
+
+    /* ══════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════ */
+    .footer {
+      background: var(--dark-sf);
+      border-top: 1px solid var(--dark-border);
+      padding: var(--sp-64) 0 var(--sp-48);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: var(--sp-48);
+      margin-bottom: var(--sp-48);
+    }
+    .footer-logo {
+      font-family: var(--f-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--dark-text);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-8);
+      margin-bottom: var(--sp-16);
+    }
+    .footer-logo-mark {
+      width: 20px;
+      height: 20px;
+      border: 1.5px solid rgba(240,240,238,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .footer-tagline {
+      font-size: 13px;
+      color: rgba(240,240,238,0.45);
+      line-height: 1.65;
+      max-width: 260px;
+      margin-bottom: var(--sp-24);
+    }
+    .footer-social {
+      display: flex;
+      gap: var(--sp-8);
+    }
+    .footer-social a {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--dark-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(240,240,238,0.4);
+      transition: color 0.2s, border-color 0.2s;
+      cursor: pointer;
+    }
+    .footer-social a:hover { color: var(--dark-text); border-color: rgba(240,240,238,0.25); }
+    .footer-col-title {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(240,240,238,0.35);
+      margin-bottom: var(--sp-20, 20px);
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-8);
+    }
+    .footer-links a {
+      font-size: 13px;
+      color: rgba(240,240,238,0.55);
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+    .footer-links a:hover { color: var(--dark-text); }
+    .footer-contact a {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .footer-contact .fc-label {
+      font-family: var(--f-mono);
+      font-size: 8.5px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: rgba(240,240,238,0.3);
+    }
+    .footer-contact .fc-val {
+      font-size: 12.5px;
+      color: rgba(240,240,238,0.55);
+    }
+    .footer-bottom {
+      border-top: 1px solid var(--dark-border);
+      padding-top: var(--sp-24);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--sp-32);
+      flex-wrap: wrap;
+    }
+    .footer-disclaimer {
+      font-size: 11px;
+      color: rgba(240,240,238,0.28);
+      line-height: 1.65;
+      max-width: 560px;
+    }
+    .footer-copy {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: rgba(240,240,238,0.25);
+      flex-shrink: 0;
+    }
+    @media (max-width: 900px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--sp-32); }
+    }
+    @media (max-width: 540px) {
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       COMPLIANCE GATE
+  ═══════════════════════════════════════════ -->
+  <div class="gate" id="gate" role="dialog" aria-modal="true" aria-label="Age and research disclaimer verification">
+    <div class="gate-inner">
+      <div class="gate-logo">
+        <div class="gate-logo-mark">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M6 1L11 10H1L6 1Z" stroke="currentColor" stroke-width="1" fill="none"/>
+          </svg>
+        </div>
+        APEX Peptides
+      </div>
+
+      <div class="gate-rule"></div>
+
+      <div class="gate-alert">
+        <span class="gate-alert-dot"></span>
+        Restricted Access — Verification Required
+      </div>
+
+      <h1 class="gate-title">Before You Enter</h1>
+      <p class="gate-sub">This website contains information about research compounds produced for scientific study. Access is restricted to qualified individuals who understand the nature of these products.</p>
+
+      <div class="gate-checks">
+        <label class="gate-check">
+          <input type="checkbox" id="check-age">
+          <label for="check-age">I confirm that I am <strong>18 years of age or older</strong> and legally permitted to access this site in my jurisdiction.</label>
+        </label>
+        <label class="gate-check">
+          <input type="checkbox" id="check-research">
+          <label for="check-research">I understand that all products on this site are <strong>strictly for research purposes only</strong> and are not intended for human or animal consumption.</label>
+        </label>
+      </div>
+
+      <button class="gate-enter" id="gateEnter" disabled>Enter Site</button>
+      <button class="gate-exit" onclick="window.location.href='https://www.google.com'">Exit Site</button>
+
+      <div class="gate-legal">
+        APEX Peptides Ltd is a UK-registered research supply company. All compounds are sold in compliance with applicable UK regulations. By entering this site you confirm that your use of any information or products found herein will comply with all applicable laws and regulations.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SITE WRAPPER
+  ═══════════════════════════════════════════ -->
+  <div id="siteWrap" style="display:none;">
+
+    <!-- ── ANNOUNCEMENT STRIP ── -->
+    <div class="announcement" aria-label="Site announcements">
+      <div class="ann-track" id="annTrack">
+        <!-- cloned by JS -->
+        <div class="ann-items-set">
+          <span class="ann-item"><strong>Free UK Shipping</strong> <span class="ann-sep"></span> orders over £150</span>
+          <span class="ann-item"><strong>99.7% Avg Purity</strong> <span class="ann-sep"></span> HPLC verified</span>
+          <span class="ann-item"><strong>Research Use Only</strong> <span class="ann-sep"></span> not for consumption</span>
+          <span class="ann-item"><strong>34+ Compounds</strong> <span class="ann-sep"></span> in stock now</span>
+          <span class="ann-item"><strong>3rd Party Tested</strong> <span class="ann-sep"></span> COA with every order</span>
+          <span class="ann-item"><strong>UK Based</strong> <span class="ann-sep"></span> next day dispatch</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── NAV ── -->
+    <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+      <div class="container">
+        <div class="nav-inner">
+          <a href="#" class="nav-logo" aria-label="APEX Peptides home">
+            <div class="nav-logo-mark" aria-hidden="true">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                <path d="M6 1L11 10H1L6 1Z" stroke="currentColor" stroke-width="1.2" fill="none"/>
+              </svg>
+            </div>
+            APEX Peptides
+          </a>
+
+          <div class="nav-links">
+            <a href="#">Compounds</a>
+            <a href="#">Categories</a>
+            <a href="#">Certificates</a>
+            <a href="#">Research</a>
+            <a href="#">About</a>
+          </div>
+
+          <div class="nav-right">
+            <span class="nav-research-tag">Research Use Only</span>
+            <button class="nav-account" aria-label="Account">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+              </svg>
+            </button>
+            <button class="nav-cart" aria-label="Cart, 0 items">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+              </svg>
+              Cart
+              <span class="nav-cart-count">0</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ── HERO ── -->
+    <section class="hero" aria-label="Hero">
+      <div class="hero-left">
+        <div class="hero-eyebrow">UK Research Compound Supplier · Est. 2024</div>
+        <h1 class="hero-title">
+          <strong>Research Grade.</strong>
+          No Shortcuts.
+        </h1>
+        <div class="hero-divider"></div>
+        <p class="hero-sub">Premium synthetic peptides manufactured for scientific research — independently verified for purity, potency and structural integrity. Every batch. Every time.</p>
+        <div class="hero-actions">
+          <a href="#" class="btn-hero-primary" role="button">
+            Browse Compounds
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#" class="btn-hero-ghost" role="button">
+            View Certificates
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-right" aria-hidden="true">
+        <div class="hero-cards">
+          <div class="hero-card">
+            <img class="hero-card-img" src="https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280x1280/products/217/824/BPC-157_10MG_.SINGLE.VIAL__08417.1761891116.png?c=1" alt="BPC-157 vial" loading="lazy" onerror="this.style.display='none'">
+            <span class="hero-card-code">BPC — 157</span>
+            <span class="hero-card-name">Body Protection Compound</span>
+            <span class="hero-card-purity">Purity <strong>99.8%</strong></span>
+          </div>
+          <div class="hero-card">
+            <img class="hero-card-img" src="https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280x1280/products/186/892/THYMOSIN_BETA_4_TB-500_5MG.SINGLE.VIAL__76592.1762297179.png?c=1" alt="TB-500 vial" loading="lazy" onerror="this.style.display='none'">
+            <span class="hero-card-code">TB — 500</span>
+            <span class="hero-card-name">Thymosin Beta-4</span>
+            <span class="hero-card-purity">Purity <strong>99.6%</strong></span>
+          </div>
+          <div class="hero-card">
+            <img class="hero-card-img" src="https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280x1280/products/216/842/IPAMORELIN_5MG_.SINGLE.VIAL__35513.1762209354.png?c=1" alt="CJC-1295 vial" loading="lazy" onerror="this.style.display='none'">
+            <span class="hero-card-code">CJC — 1295</span>
+            <span class="hero-card-name">Long-Acting GHRH</span>
+            <span class="hero-card-purity">Purity <strong>99.5%</strong></span>
+          </div>
+          <div class="hero-card">
+            <img class="hero-card-img" src="https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280x1280/products/216/843/IPAMORELIN_10MG_.SINGLE.VIAL__95527.1762209355.png?c=1" alt="Ipamorelin vial" loading="lazy" onerror="this.style.display='none'">
+            <span class="hero-card-code">IPAR — 01</span>
+            <span class="hero-card-name">Ipamorelin GHRP</span>
+            <span class="hero-card-purity">Purity <strong>99.7%</strong></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TICKER ── -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track" id="tickerTrack">
+        <div class="ticker-items-set">
+          <span class="ticker-item"><strong>BPC-157</strong> <span class="ticker-dot"></span></span>
+          <span class="ticker-item">TB-500 <span class="ticker-dot"></span></span>
+          <span class="ticker-item"><strong>Ipamorelin</strong> <span class="ticker-dot"></span></span>
+          <span class="ticker-item">CJC-1295 <span class="ticker-dot"></span></span>
+          <span class="ticker-item"><strong>Sermorelin</strong> <span class="ticker-dot"></span></span>
+          <span class="ticker-item">PT-141 <span class="ticker-dot"></span></span>
+          <span class="ticker-item"><strong>Melanotan II</strong> <span class="ticker-dot"></span></span>
+          <span class="ticker-item">GHRP-6 <span class="ticker-dot"></span></span>
+          <span class="ticker-item"><strong>Hexarelin</strong> <span class="ticker-dot"></span></span>
+          <span class="ticker-item">AOD-9604 <span class="ticker-dot"></span></span>
+          <span class="ticker-item"><strong>Thymosin α1</strong> <span class="ticker-dot"></span></span>
+          <span class="ticker-item">Epithalon <span class="ticker-dot"></span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STATS ── -->
+    <section class="stats reveal" aria-label="Key statistics">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-num" data-count="99.7" data-suffix="%"><span class="count-val">0</span>%</div>
+            <span class="stat-label">Average Purity</span>
+            <span class="stat-desc">Across all compounds, HPLC verified</span>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" data-count="34" data-suffix="+"><span class="count-val">0</span>+</div>
+            <span class="stat-label">Compounds Available</span>
+            <span class="stat-desc">Research-grade synthetic peptides</span>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" data-count="1200" data-suffix="+"><span class="count-val">0</span>+</div>
+            <span class="stat-label">Research Orders</span>
+            <span class="stat-desc">Shipped across the UK &amp; EU</span>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num"><span class="count-val-cert">0</span></div>
+            <span class="stat-label">3rd Party Labs</span>
+            <span class="stat-desc">Independent COA with every batch</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CATEGORIES ── -->
+    <section class="categories" aria-label="Compound categories">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <div class="section-eyebrow">Compound Categories</div>
+            <h2 class="section-title">Browse by<br><strong>Research Focus</strong></h2>
+          </div>
+          <a href="#" class="section-link">All Categories <span class="arrow">→</span></a>
+        </div>
+
+        <div class="cat-grid">
+          <div class="cat-card reveal">
+            <div class="cat-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+            </div>
+            <div class="cat-name">Tissue & Repair</div>
+            <p class="cat-desc">Compounds studied for their role in cellular regeneration, wound healing, and structural maintenance in research models.</p>
+            <span class="cat-count">08 compounds →</span>
+          </div>
+          <div class="cat-card reveal">
+            <div class="cat-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
+            </div>
+            <div class="cat-name">Growth Hormone Peptides</div>
+            <p class="cat-desc">GHRH and GHRP analogues used in research into secretagogue activity, pulsatile GH release, and receptor binding.</p>
+            <span class="cat-count">12 compounds →</span>
+          </div>
+          <div class="cat-card reveal">
+            <div class="cat-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 12.5l3 3 9-9"/><circle cx="12" cy="12" r="9"/></svg>
+            </div>
+            <div class="cat-name">Immune Modulators</div>
+            <p class="cat-desc">Thymic peptides and immunomodulatory agents for research into immune regulation, cytokine activity, and longevity pathways.</p>
+            <span class="cat-count">07 compounds →</span>
+          </div>
+          <div class="cat-card reveal">
+            <div class="cat-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </div>
+            <div class="cat-name">Melanocortin Research</div>
+            <p class="cat-desc">MT-I and MT-II analogues studied in pigmentation biology, appetite regulation, and CNS receptor research.</p>
+            <span class="cat-count">05 compounds →</span>
+          </div>
+          <div class="cat-card reveal">
+            <div class="cat-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+            </div>
+            <div class="cat-name">Metabolic & Fat</div>
+            <p class="cat-desc">AOD-9604 and related compounds used in obesity research, lipid metabolism studies, and adipogenic pathway analysis.</p>
+            <span class="cat-count">04 compounds →</span>
+          </div>
+          <div class="cat-card reveal">
+            <div class="cat-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+            </div>
+            <div class="cat-name">Longevity & Epigenetic</div>
+            <p class="cat-desc">Epithalon, GHK-Cu, and related peptides researched for telomere biology, epigenetic reprogramming, and senescence pathways.</p>
+            <span class="cat-count">06 compounds →</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PRODUCTS ── -->
+    <section class="products" aria-label="Featured products">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <div class="section-eyebrow">Featured Compounds</div>
+            <h2 class="section-title">Most Researched<br><strong>This Month</strong></h2>
+          </div>
+          <a href="#" class="section-link">Full Catalog <span class="arrow">→</span></a>
+        </div>
+
+        <div class="products-grid">
+
+          <!-- Product 1 -->
+          <article class="prod-card reveal">
+            <div class="prod-visual">
+              <img src="https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280x1280/products/217/824/BPC-157_10MG_.SINGLE.VIAL__08417.1761891116.png?c=1" alt="BPC-157 research peptide vial" loading="lazy" onerror="this.style.display='none'">
+              <span class="prod-badge badge-pop">Popular</span>
+              <div class="prod-overlay">
+                <button class="prod-overlay-btn" aria-label="Quick add BPC-157 to cart">Add to Cart</button>
+              </div>
+            </div>
+            <div class="prod-info">
+              <div class="prod-top">
+                <h3 class="prod-name">Body Protection Compound</h3>
+                <span class="prod-purity">Purity <strong>99.8%</strong></span>
+              </div>
+              <p class="prod-use">Research: tissue regeneration, wound healing, mucosal protection pathways</p>
+              <div class="prod-footer">
+                <span class="prod-price">£42.00</span>
+                <span class="prod-stock stock-in"><span class="prod-stock-dot"></span>In Stock</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 2 -->
+          <article class="prod-card reveal">
+            <div class="prod-visual">
+              <img src="https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280x1280/products/186/892/THYMOSIN_BETA_4_TB-500_5MG.SINGLE.VIAL__76592.1762297179.png?c=1" alt="TB-500 Thymosin Beta-4 research peptide vial" loading="lazy" onerror="this.style.display='none'">
+              <span class="prod-badge badge-new">New Batch</span>
+              <div class="prod-overlay">
+                <button class="prod-overlay-btn" aria-label="Quick add TB-500 to cart">Add to Cart</button>
+              </div>
+            </div>
+            <div class="prod-info">
+              <div class="prod-top">
+                <h3 class="prod-name">Thymosin Beta-4</h3>
+                <span class="prod-purity">Purity <strong>99.6%</strong></span>
+              </div>
+              <p class="prod-use">Research: cellular migration, actin polymerisation, anti-inflammatory models</p>
+              <div class="prod-footer">
+                <span class="prod-price">£54.00</span>
+                <span class="prod-stock stock-in"><span class="prod-stock-dot"></span>In Stock</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 3 -->
+          <article class="prod-card reveal">
+            <div class="prod-visual">
+              <img src="https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280x1280/products/216/842/IPAMORELIN_5MG_.SINGLE.VIAL__35513.1762209354.png?c=1" alt="CJC-1295 GHRH research peptide vial" loading="lazy" onerror="this.style.display='none'">
+              <span class="prod-badge badge-lim">Low Stock</span>
+              <div class="prod-overlay">
+                <button class="prod-overlay-btn" aria-label="Quick add CJC-1295 to cart">Add to Cart</button>
+              </div>
+            </div>
+            <div class="prod-info">
+              <div class="prod-top">
+                <h3 class="prod-name">Long-Acting GHRH</h3>
+                <span class="prod-purity">Purity <strong>99.5%</strong></span>
+              </div>
+              <p class="prod-use">Research: extended GH secretagogue kinetics, DAC conjugation studies</p>
+              <div class="prod-footer">
+                <span class="prod-price">£48.00</span>
+                <span class="prod-stock stock-low"><span class="prod-stock-dot"></span>Low Stock</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 4 -->
+          <article class="prod-card reveal">
+            <div class="prod-visual">
+              <img src="https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280x1280/products/216/843/IPAMORELIN_10MG_.SINGLE.VIAL__95527.1762209355.png?c=1" alt="Ipamorelin GHRP research peptide vial" loading="lazy" onerror="this.style.display='none'">
+              <div class="prod-overlay">
+                <button class="prod-overlay-btn" aria-label="Quick add Ipamorelin to cart">Add to Cart</button>
+              </div>
+            </div>
+            <div class="prod-info">
+              <div class="prod-top">
+                <h3 class="prod-name">Ipamorelin GHRP</h3>
+                <span class="prod-purity">Purity <strong>99.7%</strong></span>
+              </div>
+              <p class="prod-use">Research: selective GH release, pulsatile secretion, somatostatin suppression</p>
+              <div class="prod-footer">
+                <span class="prod-price">£39.00</span>
+                <span class="prod-stock stock-in"><span class="prod-stock-dot"></span>In Stock</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── QUALITY / PURITY ── -->
+    <section class="quality" aria-label="Quality and purity standards">
+      <div class="container">
+        <div class="quality-grid">
+          <div class="quality-left reveal">
+            <div class="section-eyebrow">Quality Standards</div>
+            <h2 class="section-title" style="margin-bottom:24px;">Third-Party<br><strong>Verified Purity</strong></h2>
+            <p class="quality-text">Every batch produced by APEX Peptides is independently tested by accredited third-party laboratories before dispatch. Certificates of Analysis are available for download on each product page — no exceptions.</p>
+
+            <div class="quality-points">
+              <div class="quality-point">
+                <span class="qp-num">01</span>
+                <div>
+                  <div class="qp-title">HPLC Analysis</div>
+                  <p class="qp-desc">High-Performance Liquid Chromatography confirms structural identity and detects impurity profiles down to 0.05%.</p>
+                </div>
+              </div>
+              <div class="quality-point">
+                <span class="qp-num">02</span>
+                <div>
+                  <div class="qp-title">Mass Spectrometry</div>
+                  <p class="qp-desc">MS confirmation of molecular weight against reference standards for structural accuracy verification.</p>
+                </div>
+              </div>
+              <div class="quality-point">
+                <span class="qp-num">03</span>
+                <div>
+                  <div class="qp-title">Amino Acid Analysis</div>
+                  <p class="qp-desc">Full sequence verification for multi-chain peptides to confirm composition and proper synthesis.</p>
+                </div>
+              </div>
+            </div>
+
+            <button class="quality-cta" style="margin-top:32px;">
+              Download Sample COA
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+          </div>
+
+          <div class="quality-right reveal">
+            <div class="section-eyebrow" style="margin-bottom:24px;">Certificate of Analysis Preview</div>
+
+            <div class="lab-report">
+              <div class="lab-report-header">
+                <div>
+                  <div class="lab-report-compound">BPC-157 · Lot #AX2024-0412</div>
+                  <div class="lab-report-date">Tested: April 2026 · Expires: April 2028</div>
+                </div>
+                <span class="lab-stamp">PASS</span>
+              </div>
+              <div class="lab-bars">
+                <div class="lab-bar-row">
+                  <span class="lab-bar-label">Purity</span>
+                  <div class="lab-bar-track"><div class="lab-bar-fill" data-width="99.8"></div></div>
+                  <span class="lab-bar-val">99.8%</span>
+                </div>
+                <div class="lab-bar-row">
+                  <span class="lab-bar-label">Identity</span>
+                  <div class="lab-bar-track"><div class="lab-bar-fill" data-width="100"></div></div>
+                  <span class="lab-bar-val">Confirmed</span>
+                </div>
+                <div class="lab-bar-row">
+                  <span class="lab-bar-label">Moisture</span>
+                  <div class="lab-bar-track"><div class="lab-bar-fill" data-width="8"></div></div>
+                  <span class="lab-bar-val">&lt; 8%</span>
+                </div>
+                <div class="lab-bar-row">
+                  <span class="lab-bar-label">Endotoxin</span>
+                  <div class="lab-bar-track"><div class="lab-bar-fill" data-width="4"></div></div>
+                  <span class="lab-bar-val">&lt; 1 EU/mg</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="lab-report">
+              <div class="lab-report-header">
+                <div>
+                  <div class="lab-report-compound">TB-500 · Lot #AX2024-0398</div>
+                  <div class="lab-report-date">Tested: March 2026 · Expires: March 2028</div>
+                </div>
+                <span class="lab-stamp">PASS</span>
+              </div>
+              <div class="lab-bars">
+                <div class="lab-bar-row">
+                  <span class="lab-bar-label">Purity</span>
+                  <div class="lab-bar-track"><div class="lab-bar-fill" data-width="99.6"></div></div>
+                  <span class="lab-bar-val">99.6%</span>
+                </div>
+                <div class="lab-bar-row">
+                  <span class="lab-bar-label">Identity</span>
+                  <div class="lab-bar-track"><div class="lab-bar-fill" data-width="100"></div></div>
+                  <span class="lab-bar-val">Confirmed</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── EMAIL CAPTURE ── -->
+    <section class="email-capture" aria-label="Newsletter signup">
+      <div class="container">
+        <div class="email-capture-inner">
+          <div class="section-eyebrow reveal">Research Updates</div>
+          <h2 class="section-title reveal" style="margin-bottom:16px;font-style:italic;font-weight:300;">Stay Informed<br><strong style="font-style:normal;font-weight:600;">On New Compounds</strong></h2>
+          <p class="email-capture-body reveal">New compounds, batch releases, purity data, and research briefings. No spam. Unsubscribe anytime.</p>
+          <form class="email-form reveal" onsubmit="return false;" aria-label="Email signup form">
+            <input type="email" placeholder="your.email@institution.ac.uk" aria-label="Email address" autocomplete="email">
+            <button type="submit" aria-label="Subscribe to research updates">Subscribe</button>
+          </form>
+          <p class="email-disclaimer reveal">By subscribing, you confirm you are a qualified researcher. We do not share your information with third parties. <a href="#" style="color:inherit;text-decoration:underline;">Privacy Policy</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TESTIMONIALS ── -->
+    <section class="testimonials" aria-label="Customer reviews">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <div class="section-eyebrow">From Researchers</div>
+            <h2 class="section-title">Trusted by<br><strong>Independent Scientists</strong></h2>
+          </div>
+        </div>
+        <div class="testimonials-grid">
+          <div class="review-card reveal">
+            <div class="review-stars" aria-label="5 out of 5 stars">
+              <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+            </div>
+            <p class="review-text">"Ordered BPC-157 and TB-500 — COAs arrived with the order, HPLC numbers exactly as advertised. The purity figures match our in-house checks. Very rare in this space."</p>
+            <div class="review-footer">
+              <div class="review-avatar" aria-hidden="true">DR</div>
+              <div>
+                <div class="review-name">D. Ramsden</div>
+                <div class="review-tag">Independent Researcher · UK</div>
+              </div>
+              <span class="review-verified">✓ Verified</span>
+            </div>
+          </div>
+          <div class="review-card reveal">
+            <div class="review-stars" aria-label="5 out of 5 stars">
+              <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+            </div>
+            <p class="review-text">"Finally a UK supplier with consistent purity and proper documentation. The compliance process is clear, the packaging is professional, and dispatch is fast."</p>
+            <div class="review-footer">
+              <div class="review-avatar" aria-hidden="true">SK</div>
+              <div>
+                <div class="review-name">S. Kellner</div>
+                <div class="review-tag">Biochem Laboratory · Germany</div>
+              </div>
+              <span class="review-verified">✓ Verified</span>
+            </div>
+          </div>
+          <div class="review-card reveal">
+            <div class="review-stars" aria-label="5 out of 5 stars">
+              <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+            </div>
+            <p class="review-text">"The stock status on site is accurate — when it says low stock, it means it. Ordered CJC-1295 immediately and received the next day. Exactly what the field needs."</p>
+            <div class="review-footer">
+              <div class="review-avatar" aria-hidden="true">PT</div>
+              <div>
+                <div class="review-name">P. Thomas</div>
+                <div class="review-tag">Research Associate · UCL</div>
+              </div>
+              <span class="review-verified">✓ Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FINAL CTA ── -->
+    <section class="final-cta" aria-label="Call to action">
+      <div class="container">
+        <div class="final-cta-inner">
+          <div class="final-cta-eyebrow">Begin Your Research</div>
+          <h2 class="final-cta-title">
+            <strong>Every Compound.</strong><br>
+            Independently Verified.
+          </h2>
+          <p class="final-cta-sub">34+ research-grade peptides. Certificate of Analysis with every order. Shipped from the UK — next business day.</p>
+          <div class="final-cta-actions">
+            <a href="#" class="btn-hero-primary" role="button">
+              Browse Full Catalog
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#" class="btn-hero-ghost" role="button">View Certificates</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer class="footer" aria-label="Site footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-logo">
+              <div class="footer-logo-mark" aria-hidden="true">
+                <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
+                  <path d="M6 1L11 10H1L6 1Z" stroke="rgba(240,240,238,0.4)" stroke-width="1" fill="none"/>
+                </svg>
+              </div>
+              APEX Peptides
+            </div>
+            <p class="footer-tagline">UK-based research compound supplier. Independent purity verification on every batch.</p>
+            <div class="footer-social" aria-label="Social media links">
+              <a href="#" aria-label="Twitter">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+              </a>
+              <a href="#" aria-label="Instagram">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+              <a href="#" aria-label="Telegram">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21.198 2.433a2.242 2.242 0 00-1.022.215l-17 7a2 2 0 00.28 3.809l4.592 1.362 2.17 6.508a1 1 0 001.774.23l2.931-3.47 4.983 3.498a2 2 0 003.139-1.24l2.935-16.5a2 2 0 00-2.782-2.412z"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Compounds</div>
+            <div class="footer-links">
+              <a href="#">Tissue & Repair</a>
+              <a href="#">Growth Hormone</a>
+              <a href="#">Immune Modulators</a>
+              <a href="#">Melanocortin</a>
+              <a href="#">Metabolic</a>
+              <a href="#">Longevity</a>
+            </div>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Company</div>
+            <div class="footer-links">
+              <a href="#">About APEX</a>
+              <a href="#">Quality Process</a>
+              <a href="#">Certificates</a>
+              <a href="#">Research Blog</a>
+              <a href="#">Contact</a>
+              <a href="#">Wholesale</a>
+            </div>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Contact</div>
+            <div class="footer-links footer-contact">
+              <a href="mailto:research@apexpeptides.co.uk" class="footer-links">
+                <span class="fc-label">Email</span>
+                <span class="fc-val">research@apexpeptides.co.uk</span>
+              </a>
+              <a href="#" class="footer-links" style="margin-top:12px;">
+                <span class="fc-label">Location</span>
+                <span class="fc-val">London, United Kingdom</span>
+              </a>
+              <a href="#" class="footer-links" style="margin-top:12px;">
+                <span class="fc-label">Registered</span>
+                <span class="fc-val">Companies House UK</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p class="footer-disclaimer">
+            <strong style="color:rgba(240,240,238,0.4);">Research Use Only:</strong> All products sold by APEX Peptides Ltd are intended strictly for scientific research purposes and are not approved for human or veterinary use. These products are not medicines, food supplements, or cosmetics. APEX Peptides Ltd accepts no liability for misuse. By purchasing, buyers confirm compliance with all applicable local, national, and international laws. UK registered company. VAT registered.
+          </p>
+          <span class="footer-copy">© 2026 APEX Peptides Ltd</span>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- /siteWrap -->
+
+  <script>
+    /* ════════════════════════════════════════
+       COMPLIANCE GATE
+    ════════════════════════════════════════ */
+    const gate       = document.getElementById('gate');
+    const siteWrap   = document.getElementById('siteWrap');
+    const gateEnter  = document.getElementById('gateEnter');
+    const checkAge   = document.getElementById('check-age');
+    const checkRes   = document.getElementById('check-research');
+
+    function updateGateBtn() {
+      const ready = checkAge.checked && checkRes.checked;
+      gateEnter.disabled = !ready;
+      gateEnter.classList.toggle('active', ready);
+    }
+    checkAge.addEventListener('change', updateGateBtn);
+    checkRes.addEventListener('change', updateGateBtn);
+
+    function passGate() {
+      try { sessionStorage.setItem('apex_gate', '1'); } catch(e) {}
+      gate.classList.add('hidden');
+      siteWrap.style.display = '';
+      // trigger initial animations after gate clears
+      setTimeout(() => {
+        window.dispatchEvent(new Event('scroll'));
+        tickerInit();
+        annInit();
+      }, 100);
+    }
+
+    // Check if already passed this session
+    try {
+      if (sessionStorage.getItem('apex_gate') === '1') {
+        gate.style.display = 'none';
+        siteWrap.style.display = '';
+        setTimeout(() => { tickerInit(); annInit(); }, 100);
+      }
+    } catch(e) {}
+
+    gateEnter.addEventListener('click', passGate);
+
+    /* ════════════════════════════════════════
+       ANNOUNCEMENT + TICKER — clone for seamless loop
+    ════════════════════════════════════════ */
+    function annInit() {
+      const track = document.getElementById('annTrack');
+      const set   = track.querySelector('.ann-items-set');
+      if (!set) return;
+      const clone = set.cloneNode(true);
+      track.appendChild(clone);
+    }
+
+    function tickerInit() {
+      const track = document.getElementById('tickerTrack');
+      const set   = track.querySelector('.ticker-items-set');
+      if (!set) return;
+      const clone = set.cloneNode(true);
+      track.appendChild(clone);
+    }
+
+    /* ════════════════════════════════════════
+       NAV — scroll state
+    ════════════════════════════════════════ */
+    const nav = document.getElementById('nav');
+    function onScroll() {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    /* ════════════════════════════════════════
+       SCROLL REVEAL
+    ════════════════════════════════════════ */
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          const siblings = Array.from(e.target.parentElement.children)
+            .filter(el => el.classList.contains('reveal'));
+          const idx = siblings.indexOf(e.target);
+          setTimeout(() => e.target.classList.add('vis'), idx * 80);
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    /* ════════════════════════════════════════
+       ANIMATED COUNTERS
+    ════════════════════════════════════════ */
+    function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+
+    function animNum(el, target, duration, isFloat, suffix, prefix) {
+      const start = performance.now();
+      function step(now) {
+        const p   = Math.min((now - start) / duration, 1);
+        const val = isFloat
+          ? (easeOutQuart(p) * target).toFixed(1)
+          : Math.round(easeOutQuart(p) * target);
+        el.textContent = (prefix || '') + val;
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = (prefix || '') + (isFloat ? target.toFixed(1) : target);
+      }
+      requestAnimationFrame(step);
+    }
+
+    let countersRan = false;
+    const statsObs = new IntersectionObserver((entries) => {
+      if (countersRan) return;
+      if (!entries[0].isIntersecting) return;
+      countersRan = true;
+      statsObs.disconnect();
+
+      const items = document.querySelectorAll('[data-count]');
+      items.forEach(item => {
+        const target = parseFloat(item.dataset.count);
+        const isFloat = item.dataset.count.includes('.');
+        const valEl = item.querySelector('.count-val');
+        if (valEl) animNum(valEl, target, 1600, isFloat, '', '');
+      });
+
+      // animate cert count 0 → 4
+      const certEl = document.querySelector('.count-val-cert');
+      if (certEl) animNum(certEl, 4, 1200, false, '', '');
+
+    }, { threshold: 0.3 });
+    const statsSection = document.querySelector('.stats');
+    if (statsSection) statsObs.observe(statsSection);
+
+    /* ════════════════════════════════════════
+       LAB BAR FILLS  (trigger on scroll into view)
+    ════════════════════════════════════════ */
+    let barsTriggered = false;
+    const barObs = new IntersectionObserver((entries) => {
+      if (barsTriggered) return;
+      if (!entries[0].isIntersecting) return;
+      barsTriggered = true;
+      barObs.disconnect();
+      document.querySelectorAll('.lab-bar-fill').forEach(bar => {
+        bar.style.width = bar.dataset.width + '%';
+      });
+    }, { threshold: 0.3 });
+    const qualitySection = document.querySelector('.quality');
+    if (qualitySection) barObs.observe(qualitySection);
+
+    /* ════════════════════════════════════════
+       PRODUCT CARD 3D TILT on hover
+    ════════════════════════════════════════ */
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReduced) {
+      document.querySelectorAll('.prod-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const r  = card.getBoundingClientRect();
+          const x  = (e.clientX - r.left) / r.width  - 0.5;
+          const y  = (e.clientY - r.top)  / r.height - 0.5;
+          card.style.transform = `perspective(600px) rotateY(${x * 7}deg) rotateX(${-y * 7}deg) translateY(-2px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+      });
+    }
+
+    /* ════════════════════════════════════════
+       CAT CARD stagger
+    ════════════════════════════════════════ */
+    // handled by revealObs stagger above
+  </script>
+</body>
+</html>
