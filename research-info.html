@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Research Knowledge Base | PeptideInfo UK</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "surface-container-highest": "#353535",
+        "outline-variant": "#474747",
+        "tertiary": "#d4e4f6",
+        "background": "#131313",
+        "on-background": "#e2e2e2",
+        "secondary-container": "#454747",
+        "surface": "#131313",
+        "on-primary": "#1a1c1c",
+        "on-surface-variant": "#c6c6c6",
+        "surface-container-lowest": "#0e0e0e",
+        "surface-bright": "#393939",
+        "primary": "#ffffff",
+        "surface-container-high": "#2a2a2a",
+        "on-secondary-container": "#e2e2e2",
+        "surface-container": "#1f1f1f",
+        "surface-container-low": "#1b1b1b",
+        "outline": "#919191",
+        "on-surface": "#e2e2e2",
+      },
+      borderRadius: { none: "0px", DEFAULT: "0px", lg: "0px", xl: "0px", full: "9999px" },
+      fontFamily: { headline: ["Space Grotesk", "sans-serif"], body: ["Inter", "sans-serif"], label: ["Inter", "sans-serif"] }
+    }
+  }
+}
+</script>
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+.glass-nav { background: rgba(53,53,53,0.6); backdrop-filter: blur(24px); }
+.liquid-chrome { background: linear-gradient(135deg,#FFFFFF 0%,#D4D4D4 100%); }
+.ghost-border { border: 1px solid rgba(71,71,71,0.35); }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #131313; }
+::-webkit-scrollbar-thumb { background: #353535; }
+.article-card { transition: background 0.3s; }
+.article-card:hover { background: #1b1b1b; }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+
+<!-- ── NAV ── -->
+<header class="fixed top-0 left-0 right-0 z-50 glass-nav">
+  <div class="flex justify-between items-center h-16 px-6 w-full max-w-7xl mx-auto">
+    <div class="flex items-center gap-8">
+      <div class="flex flex-col">
+        <a class="text-base font-black tracking-tighter text-zinc-50 font-headline uppercase leading-none" href="#">PeptideInfo UK</a>
+        <span class="text-[9px] font-label uppercase tracking-[0.15em] text-outline">peptideinfo.co.uk</span>
+      </div>
+      <nav class="hidden md:flex gap-8">
+        <a class="text-zinc-400 font-medium font-headline uppercase tracking-tight text-xs hover:text-zinc-50 transition-colors" href="#">Compounds</a>
+        <a class="text-zinc-50 border-b-2 border-zinc-50 pb-1 font-headline uppercase tracking-tight text-xs" href="#">Knowledge Base</a>
+        <a class="text-zinc-400 font-medium font-headline uppercase tracking-tight text-xs hover:text-zinc-50 transition-colors" href="#">Lab Reports</a>
+        <a class="text-zinc-400 font-medium font-headline uppercase tracking-tight text-xs hover:text-zinc-50 transition-colors" href="homepage.html">Shop →</a>
+      </nav>
+    </div>
+    <div class="hidden md:flex items-center gap-2 text-xs font-label text-outline uppercase tracking-wider">
+      <span class="material-symbols-outlined" style="font-size:14px">link</span>
+      <span>Companion to</span>
+      <a href="homepage.html" class="text-primary hover:opacity-70 transition-opacity">performancepeptideuk.com</a>
+    </div>
+  </div>
+</header>
+
+<!-- ── DISCLAIMER BANNER ── -->
+<div class="mt-16 border-l-4 border-primary bg-surface-container-lowest px-6 py-5 max-w-7xl mx-auto mt-16">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h3 class="text-xs font-black font-headline uppercase tracking-widest text-primary mb-1">Companion Information Site</h3>
+      <p class="text-xs text-outline leading-relaxed">
+        All content on PeptideInfo UK is strictly for educational and research reference. No content constitutes medical advice. References to anecdotal use are documented for academic purposes only.
+      </p>
+    </div>
+    <button class="text-[10px] font-label uppercase tracking-widest text-outline border border-outline-variant hover:border-primary hover:text-primary transition-colors py-2 px-4 whitespace-nowrap flex-shrink-0">
+      Understood
+    </button>
+  </div>
+</div>
+
+<main class="py-16 px-6 max-w-7xl mx-auto">
+
+  <!-- ── SEARCH HEADER ── -->
+  <div class="mb-20">
+    <h1 class="text-6xl md:text-8xl font-black font-headline tracking-tighter uppercase leading-none mb-10">
+      Knowledge<br/>Base.
+    </h1>
+    <div class="relative max-w-2xl">
+      <input type="text"
+        placeholder="Search compounds, protocols, reconstitution guides..."
+        class="w-full bg-transparent ghost-border focus:border-primary focus:outline-none text-sm py-5 px-6 pr-14 text-on-surface placeholder:text-outline transition-colors duration-300"/>
+      <span class="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 text-outline-variant">search</span>
+    </div>
+    <div class="flex flex-wrap gap-3 mt-5">
+      <button class="text-[10px] font-label text-on-surface-variant border border-outline-variant py-1 px-3 hover:border-primary hover:text-primary transition-colors tracking-widest uppercase">Reconstitution</button>
+      <button class="text-[10px] font-label text-on-surface-variant border border-outline-variant py-1 px-3 hover:border-primary hover:text-primary transition-colors tracking-widest uppercase">Dosing</button>
+      <button class="text-[10px] font-label text-on-surface-variant border border-outline-variant py-1 px-3 hover:border-primary hover:text-primary transition-colors tracking-widest uppercase">Storage</button>
+      <button class="text-[10px] font-label text-on-surface-variant border border-outline-variant py-1 px-3 hover:border-primary hover:text-primary transition-colors tracking-widest uppercase">Molecular Data</button>
+      <button class="text-[10px] font-label text-on-surface-variant border border-outline-variant py-1 px-3 hover:border-primary hover:text-primary transition-colors tracking-widest uppercase">Legal</button>
+    </div>
+  </div>
+
+  <!-- ── FEATURED ARTICLES BENTO GRID ── -->
+  <div class="mb-4">
+    <span class="text-xs font-bold font-label tracking-[0.3em] uppercase text-on-surface-variant">Featured Research</span>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-px bg-outline-variant/20 mb-20">
+
+    <!-- Main featured article -->
+    <div class="article-card md:col-span-8 bg-surface p-10 relative overflow-hidden ghost-border">
+      <div class="absolute inset-0 z-0">
+        <img src="https://images.pexels.com/photos/2280571/pexels-photo-2280571.jpeg?auto=compress&cs=tinysrgb&w=1200"
+             class="w-full h-full object-cover opacity-10 grayscale" alt=""
+             onerror="this.style.display='none'">
+      </div>
+      <div class="relative z-10 flex flex-col justify-between h-full min-h-[400px]">
+        <div>
+          <div class="flex items-center gap-3 mb-8">
+            <span class="text-[10px] font-bold font-label tracking-[0.25em] uppercase text-tertiary border border-tertiary/30 py-1 px-3">Guide</span>
+            <span class="text-[10px] font-label text-outline tracking-widest uppercase">Peptide Prep · 14 min read</span>
+          </div>
+          <h2 class="text-4xl md:text-5xl font-black font-headline tracking-tighter uppercase leading-none mb-6">
+            Foundational Peptide<br/>Reconstitution:<br/>A Quantitative Guide
+          </h2>
+          <p class="text-on-surface-variant text-sm leading-relaxed max-w-xl">
+            A systematic primer on reconstituting lyophilized peptides: BAC water ratios, sterile technique, volumetric calculations, storage protocols, and degradation indicators. For laboratory use only.
+          </p>
+        </div>
+        <div class="flex items-center gap-6 mt-10">
+          <button class="flex items-center gap-3 liquid-chrome text-on-primary py-4 px-8 text-xs font-bold font-label tracking-widest uppercase hover:opacity-90 transition-opacity">
+            <span>Read Full Guide</span>
+            <span class="material-symbols-outlined" style="font-size:16px">arrow_forward</span>
+          </button>
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-outline" style="font-size:16px">bookmark</span>
+            <span class="text-[10px] font-label text-outline uppercase tracking-widest">Save</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right side articles -->
+    <div class="md:col-span-4 flex flex-col gap-px bg-outline-variant/10">
+      <!-- Article 2 -->
+      <div class="article-card bg-surface p-8 flex-1 ghost-border flex flex-col justify-between min-h-[200px]">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="text-[10px] font-bold font-label tracking-[0.25em] uppercase text-amber-300 border border-amber-300/30 py-1 px-2">Anecdotal</span>
+            <span class="text-[10px] font-label text-outline tracking-widest uppercase">8 min</span>
+          </div>
+          <h3 class="text-lg font-black font-headline tracking-tight uppercase leading-tight mb-3">
+            Anecdotal Dosing: GLP-1 Analogues
+          </h3>
+          <p class="text-xs text-on-surface-variant leading-relaxed">Community-sourced data on semaglutide and tirzepatide protocols. Strictly for research documentation.</p>
+        </div>
+        <a href="#" class="flex items-center gap-2 text-[10px] font-label uppercase tracking-widest text-primary mt-5 hover:opacity-70 transition-opacity">
+          <span>Read More</span>
+          <span class="material-symbols-outlined" style="font-size:12px">arrow_forward</span>
+        </a>
+      </div>
+      <!-- Article 3 -->
+      <div class="article-card bg-surface p-8 flex-1 ghost-border flex flex-col justify-between min-h-[200px]">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="text-[10px] font-bold font-label tracking-[0.25em] uppercase text-tertiary border border-tertiary/30 py-1 px-2">Technical</span>
+            <span class="text-[10px] font-label text-outline tracking-widest uppercase">6 min</span>
+          </div>
+          <h3 class="text-lg font-black font-headline tracking-tight uppercase leading-tight mb-3">
+            Stability Metrics &amp; Temperature Thresholds
+          </h3>
+          <p class="text-xs text-on-surface-variant leading-relaxed">Half-life data, freeze-thaw cycles, and long-term lyophilization storage charts for common research peptides.</p>
+        </div>
+        <a href="#" class="flex items-center gap-2 text-[10px] font-label uppercase tracking-widest text-primary mt-5 hover:opacity-70 transition-opacity">
+          <span>Read More</span>
+          <span class="material-symbols-outlined" style="font-size:12px">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Bottom row articles -->
+    <div class="article-card md:col-span-4 bg-surface p-8 ghost-border flex flex-col justify-between min-h-[220px]">
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-[10px] font-bold font-label tracking-[0.25em] uppercase text-zinc-400 border border-zinc-600 py-1 px-2">Data</span>
+          <span class="text-[10px] font-label text-outline tracking-widest uppercase">5 min</span>
+        </div>
+        <h3 class="text-lg font-black font-headline tracking-tight uppercase leading-tight mb-3">Molecular Weights Reference Table</h3>
+        <p class="text-xs text-on-surface-variant leading-relaxed">Comprehensive MW, sequence length, and isoelectric point for the 32 compounds in our catalog.</p>
+      </div>
+      <a href="#" class="flex items-center gap-2 text-[10px] font-label uppercase tracking-widest text-primary mt-5 hover:opacity-70 transition-opacity"><span>View Table</span><span class="material-symbols-outlined" style="font-size:12px">arrow_forward</span></a>
+    </div>
+
+    <div class="article-card md:col-span-4 bg-surface p-8 ghost-border flex flex-col justify-between min-h-[220px]">
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-[10px] font-bold font-label tracking-[0.25em] uppercase text-red-300 border border-red-400/30 py-1 px-2">Legal</span>
+          <span class="text-[10px] font-label text-outline tracking-widest uppercase">4 min</span>
+        </div>
+        <h3 class="text-lg font-black font-headline tracking-tight uppercase leading-tight mb-3">UK Legal Framework: Research Chemicals 2026</h3>
+        <p class="text-xs text-on-surface-variant leading-relaxed">Current MHRA guidelines, importation regulations, and researcher obligations under the Medicines Act 1968.</p>
+      </div>
+      <a href="#" class="flex items-center gap-2 text-[10px] font-label uppercase tracking-widest text-primary mt-5 hover:opacity-70 transition-opacity"><span>Read Framework</span><span class="material-symbols-outlined" style="font-size:12px">arrow_forward</span></a>
+    </div>
+
+    <div class="article-card md:col-span-4 bg-surface p-8 ghost-border flex flex-col justify-between min-h-[220px]">
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-[10px] font-bold font-label tracking-[0.25em] uppercase text-tertiary border border-tertiary/30 py-1 px-2">Protocol</span>
+          <span class="text-[10px] font-label text-outline tracking-widest uppercase">7 min</span>
+        </div>
+        <h3 class="text-lg font-black font-headline tracking-tight uppercase leading-tight mb-3">Sterile Injection Technique for In-Vitro Studies</h3>
+        <p class="text-xs text-on-surface-variant leading-relaxed">Step-by-step lab protocol detailing subcutaneous injection procedures for in-vitro peptide research models.</p>
+      </div>
+      <a href="#" class="flex items-center gap-2 text-[10px] font-label uppercase tracking-widest text-primary mt-5 hover:opacity-70 transition-opacity"><span>View Protocol</span><span class="material-symbols-outlined" style="font-size:12px">arrow_forward</span></a>
+    </div>
+
+  </div>
+
+  <!-- ── TECHNICAL DATA SECTION ── -->
+  <div class="mb-20">
+    <div class="mb-12">
+      <span class="text-[10px] font-bold font-label tracking-[0.35em] uppercase text-outline border-b border-outline pb-1">Technical Standards</span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-outline-variant/20">
+
+      <div class="bg-surface p-10 ghost-border group hover:bg-surface-container-low transition-colors duration-300">
+        <div class="flex items-start justify-between mb-8">
+          <span class="text-5xl font-black font-headline text-primary/20 uppercase leading-none">01.</span>
+          <span class="material-symbols-outlined text-primary opacity-60 group-hover:opacity-100 transition-opacity">analytics</span>
+        </div>
+        <h3 class="text-2xl font-black font-headline tracking-tight uppercase mb-4">Accuracy</h3>
+        <p class="text-sm text-on-surface-variant leading-relaxed mb-8">
+          All compounds analyzed by HPLC and LC-MS at independent UK laboratories. Concentration verified against theoretical yield before dispatch. Batch-specific reports published on request.
+        </p>
+        <div class="flex flex-col gap-3 border-t border-outline-variant/30 pt-6">
+          <div class="flex justify-between text-xs"><span class="font-label text-outline uppercase tracking-widest">HPLC Purity Target</span><span class="font-bold">≥ 98.5%</span></div>
+          <div class="flex justify-between text-xs"><span class="font-label text-outline uppercase tracking-widest">LC-MS Verification</span><span class="font-bold">Every batch</span></div>
+          <div class="flex justify-between text-xs"><span class="font-label text-outline uppercase tracking-widest">Third-Party Lab</span><span class="font-bold">Required</span></div>
+        </div>
+      </div>
+
+      <div class="bg-surface p-10 ghost-border group hover:bg-surface-container-low transition-colors duration-300">
+        <div class="flex items-start justify-between mb-8">
+          <span class="text-5xl font-black font-headline text-primary/20 uppercase leading-none">02.</span>
+          <span class="material-symbols-outlined text-primary opacity-60 group-hover:opacity-100 transition-opacity">verified_user</span>
+        </div>
+        <h3 class="text-2xl font-black font-headline tracking-tight uppercase mb-4">Integrity</h3>
+        <p class="text-sm text-on-surface-variant leading-relaxed mb-8">
+          Lyophilization performed under sterile conditions. Cold-chain maintained from synthesis through delivery. Each vial hermetically sealed with tamper-evident caps and unique batch numbering.
+        </p>
+        <div class="flex flex-col gap-3 border-t border-outline-variant/30 pt-6">
+          <div class="flex justify-between text-xs"><span class="font-label text-outline uppercase tracking-widest">Sterility Protocol</span><span class="font-bold">ISO 5 cleanroom</span></div>
+          <div class="flex justify-between text-xs"><span class="font-label text-outline uppercase tracking-widest">Storage Condition</span><span class="font-bold">-20°C lyophilized</span></div>
+          <div class="flex justify-between text-xs"><span class="font-label text-outline uppercase tracking-widest">Seal Type</span><span class="font-bold">Tamper-evident</span></div>
+        </div>
+      </div>
+
+      <div class="bg-surface p-10 ghost-border group hover:bg-surface-container-low transition-colors duration-300">
+        <div class="flex items-start justify-between mb-8">
+          <span class="text-5xl font-black font-headline text-primary/20 uppercase leading-none">03.</span>
+          <span class="material-symbols-outlined text-primary opacity-60 group-hover:opacity-100 transition-opacity">biotech</span>
+        </div>
+        <h3 class="text-2xl font-black font-headline tracking-tight uppercase mb-4">Synthesis</h3>
+        <p class="text-sm text-on-surface-variant leading-relaxed mb-8">
+          Solid-phase peptide synthesis (SPPS) using Fmoc chemistry. All protected amino acids sourced from GMP-registered suppliers. Final product purified by preparative RP-HPLC.
+        </p>
+        <div class="flex flex-col gap-3 border-t border-outline-variant/30 pt-6">
+          <div class="flex justify-between text-xs"><span class="font-label text-outline uppercase tracking-widest">Method</span><span class="font-bold">SPPS / Fmoc</span></div>
+          <div class="flex justify-between text-xs"><span class="font-label text-outline uppercase tracking-widest">Purification</span><span class="font-bold">RP-HPLC</span></div>
+          <div class="flex justify-between text-xs"><span class="font-label text-outline uppercase tracking-widest">Raw Material GMP</span><span class="font-bold">Certified</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── FULL ARTICLE INDEX ── -->
+  <div class="mb-20">
+    <div class="flex items-center justify-between mb-8">
+      <span class="text-xs font-bold font-label tracking-[0.3em] uppercase text-on-surface-variant">All Articles</span>
+      <span class="text-[10px] font-label text-outline uppercase tracking-wider">47 entries</span>
+    </div>
+    <div class="flex flex-col divide-y divide-outline-variant/20">
+      <div class="flex items-center justify-between py-5 group cursor-pointer hover:bg-surface-container-low px-4 -mx-4 transition-colors">
+        <div class="flex items-center gap-6">
+          <span class="text-[10px] font-label text-outline uppercase tracking-widest w-16">Guide</span>
+          <span class="font-headline font-bold text-sm uppercase tracking-tight">How to Reconstitute BPC-157 — Complete Lab Protocol</span>
+        </div>
+        <span class="material-symbols-outlined text-outline group-hover:text-primary group-hover:translate-x-1 transition-all">arrow_forward</span>
+      </div>
+      <div class="flex items-center justify-between py-5 group cursor-pointer hover:bg-surface-container-low px-4 -mx-4 transition-colors">
+        <div class="flex items-center gap-6">
+          <span class="text-[10px] font-label text-outline uppercase tracking-widest w-16">Data</span>
+          <span class="font-headline font-bold text-sm uppercase tracking-tight">Peptide Half-Life Comparison: BPC-157 vs TB-500 vs CJC-1295</span>
+        </div>
+        <span class="material-symbols-outlined text-outline group-hover:text-primary group-hover:translate-x-1 transition-all">arrow_forward</span>
+      </div>
+      <div class="flex items-center justify-between py-5 group cursor-pointer hover:bg-surface-container-low px-4 -mx-4 transition-colors">
+        <div class="flex items-center gap-6">
+          <span class="text-[10px] font-label text-outline uppercase tracking-widest w-16">Anecdotal</span>
+          <span class="font-headline font-bold text-sm uppercase tracking-tight">Community Reports: Selank Anxiolytic Response Timeline</span>
+        </div>
+        <span class="material-symbols-outlined text-outline group-hover:text-primary group-hover:translate-x-1 transition-all">arrow_forward</span>
+      </div>
+      <div class="flex items-center justify-between py-5 group cursor-pointer hover:bg-surface-container-low px-4 -mx-4 transition-colors">
+        <div class="flex items-center gap-6">
+          <span class="text-[10px] font-label text-outline uppercase tracking-widest w-16">Legal</span>
+          <span class="font-headline font-bold text-sm uppercase tracking-tight">UK Research Chemical Import Rules: Researcher Checklist 2026</span>
+        </div>
+        <span class="material-symbols-outlined text-outline group-hover:text-primary group-hover:translate-x-1 transition-all">arrow_forward</span>
+      </div>
+      <div class="flex items-center justify-between py-5 group cursor-pointer hover:bg-surface-container-low px-4 -mx-4 transition-colors">
+        <div class="flex items-center gap-6">
+          <span class="text-[10px] font-label text-outline uppercase tracking-widest w-16">Protocol</span>
+          <span class="font-headline font-bold text-sm uppercase tracking-tight">Ipamorelin + CJC-1295 Co-Administration: In-Vitro Study Notes</span>
+        </div>
+        <span class="material-symbols-outlined text-outline group-hover:text-primary group-hover:translate-x-1 transition-all">arrow_forward</span>
+      </div>
+    </div>
+    <div class="mt-8 flex justify-center">
+      <button class="text-xs font-bold font-label tracking-widest uppercase text-on-surface-variant border border-outline-variant py-4 px-12 hover:border-primary hover:text-primary transition-colors">
+        Load All 47 Articles
+      </button>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── NEWSLETTER (white background section) ── -->
+<section class="bg-primary py-20 px-6">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <div>
+      <h2 class="text-4xl md:text-6xl font-black font-headline tracking-tighter uppercase leading-none text-on-primary mb-4">
+        Join the<br/>Research<br/>Database.
+      </h2>
+      <p class="text-on-primary/60 text-sm leading-relaxed max-w-sm">
+        Weekly compound updates, new batch arrivals, and research index entries. No spam. Strict lab data only.
+      </p>
+    </div>
+    <div>
+      <div class="flex flex-col gap-3">
+        <input type="email" placeholder="researcher@institution.ac.uk"
+          class="bg-transparent border border-on-primary/30 focus:border-on-primary text-on-primary placeholder:text-on-primary/40 text-sm py-5 px-6 focus:outline-none transition-colors font-body uppercase tracking-widest"/>
+        <button class="py-5 text-xs font-bold font-label tracking-[0.3em] uppercase text-on-primary bg-on-primary hover:opacity-80 transition-opacity">
+          Join Database →
+        </button>
+      </div>
+      <p class="text-[10px] font-label text-on-primary/40 uppercase tracking-widest mt-5">
+        By subscribing you confirm this is for research purposes only.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="bg-zinc-900 border-t border-zinc-800">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 py-12 px-6 max-w-7xl mx-auto">
+    <div class="flex flex-col gap-4">
+      <div>
+        <span class="font-bold text-zinc-50 font-headline uppercase tracking-tighter text-lg">PeptideInfo UK</span>
+        <span class="block text-[10px] font-label text-outline uppercase tracking-widest mt-1">peptideinfo.co.uk</span>
+      </div>
+      <p class="font-body text-xs tracking-wide text-zinc-400 max-w-xs leading-relaxed">
+        Companion knowledge base for Performance Peptide UK. Not a medical reference. All content for research documentation only.
+      </p>
+    </div>
+    <div class="flex flex-col gap-3">
+      <span class="text-xs font-black uppercase tracking-[0.2em] text-on-surface">Knowledge Base</span>
+      <nav class="flex flex-col gap-2">
+        <a class="font-body text-xs tracking-wide text-zinc-400 hover:text-zinc-100 transition-colors" href="#">Reconstitution Guides</a>
+        <a class="font-body text-xs tracking-wide text-zinc-400 hover:text-zinc-100 transition-colors" href="#">Molecular Data</a>
+        <a class="font-body text-xs tracking-wide text-zinc-400 hover:text-zinc-100 transition-colors" href="#">Legal Framework</a>
+        <a class="font-body text-xs tracking-wide text-zinc-400 hover:text-zinc-100 transition-colors" href="#">Lab Protocols</a>
+      </nav>
+    </div>
+    <div class="flex flex-col gap-3">
+      <span class="text-xs font-black uppercase tracking-[0.2em] text-on-surface">Legal</span>
+      <p class="font-body text-xs tracking-wide text-zinc-400 leading-relaxed">
+        All information on this site is for educational and in-vitro research reference only. Not intended for human consumption.
+      </p>
+      <p class="font-body text-xs tracking-wide text-zinc-600 mt-2">© 2026 PeptideInfo UK · Part of the Performance Peptide network</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

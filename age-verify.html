@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Performance Peptide UK | Laboratory Access</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "surface-container-highest": "#353535",
+        "outline-variant": "#474747",
+        "tertiary": "#d4e4f6",
+        "background": "#131313",
+        "on-background": "#e2e2e2",
+        "surface": "#131313",
+        "on-primary": "#1a1c1c",
+        "on-surface-variant": "#c6c6c6",
+        "surface-container-lowest": "#0e0e0e",
+        "surface-bright": "#393939",
+        "primary": "#ffffff",
+        "surface-container-high": "#2a2a2a",
+        "surface-container": "#1f1f1f",
+        "surface-container-low": "#1b1b1b",
+        "outline": "#919191",
+        "on-surface": "#e2e2e2",
+      },
+      borderRadius: { none: "0px", DEFAULT: "0px", lg: "0px", xl: "0px", full: "9999px" },
+      fontFamily: { headline: ["Space Grotesk", "sans-serif"], body: ["Inter", "sans-serif"], label: ["Inter", "sans-serif"] }
+    }
+  }
+}
+</script>
+<style>
+body { background-color: #131313; color: #e2e2e2; font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow: hidden; }
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.glass-panel { background: rgba(53, 53, 53, 0.6); backdrop-filter: blur(24px); }
+.liquid-chrome { background: linear-gradient(135deg, #ffffff 0%, #d4d4d4 100%); }
+.ghost-border { border: 1px solid rgba(71, 71, 71, 0.35); }
+/* Scan line effect */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 4px);
+  pointer-events: none;
+}
+/* Blinking cursor */
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.blink { animation: blink 1.2s step-end infinite; }
+/* Glitch text */
+@keyframes glitch {
+  0%   { clip-path: inset(40% 0 61% 0); transform: translate(-2px, 0); }
+  20%  { clip-path: inset(92% 0 1% 0); transform: translate(2px, 0); }
+  40%  { clip-path: inset(43% 0 1% 0); transform: translate(-2px, 0); }
+  60%  { clip-path: inset(25% 0 58% 0); transform: translate(1px, 0); }
+  80%  { clip-path: inset(54% 0 7% 0); transform: translate(-1px, 0); }
+  100% { clip-path: inset(58% 0 43% 0); transform: translate(2px, 0); }
+}
+.glitch-layer { position: absolute; inset: 0; color: #fff; animation: glitch 3s infinite linear alternate-reverse; opacity: 0.5; }
+</style>
+</head>
+<body class="bg-background text-on-background overflow-hidden">
+
+<!-- Clinical Backdrop -->
+<div class="fixed inset-0 z-0 opacity-15 scanlines">
+  <img alt="Laboratory crystalline structures"
+       class="w-full h-full object-cover filter grayscale"
+       src="https://images.pexels.com/photos/954585/pexels-photo-954585.jpeg?auto=compress&cs=tinysrgb&w=1600"
+       onerror="this.style.opacity='0'">
+  <div class="absolute inset-0 bg-gradient-radial from-transparent to-background/80"></div>
+</div>
+
+<!-- Ghost watermark -->
+<div class="fixed top-0 right-0 p-12 pointer-events-none opacity-[0.03] overflow-hidden">
+  <span class="font-headline font-black text-[20rem] leading-none select-none text-white">PP_UK</span>
+</div>
+
+<!-- Layout -->
+<main class="relative z-10 min-h-screen flex items-center justify-center p-6">
+  <div class="w-full max-w-4xl bg-surface-container-lowest shadow-2xl flex flex-col md:flex-row overflow-hidden border border-outline-variant/20">
+
+    <!-- Left Branding Pillar -->
+    <div class="bg-surface-container-high p-12 md:w-5/12 flex flex-col justify-between relative overflow-hidden">
+      <div class="absolute top-0 left-0 w-[2px] h-full bg-gradient-to-b from-white/60 to-transparent"></div>
+      <div>
+        <div class="font-label text-[10px] tracking-[0.3em] uppercase text-outline mb-4">Laboratory Portal</div>
+        <h2 class="font-headline font-black text-2xl tracking-tighter text-primary uppercase leading-tight">
+          Performance<br/>Peptide UK
+        </h2>
+        <div class="mt-8 space-y-5">
+          <div>
+            <span class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase block mb-1">Location Status</span>
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-sm">location_on</span>
+              <span class="font-label text-xs font-bold uppercase tracking-wider">United Kingdom</span>
+              <span class="w-2 h-2 bg-green-400 rounded-full ml-1 animate-pulse"></span>
+            </div>
+          </div>
+          <div>
+            <span class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase block mb-1">Portal Status</span>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 bg-primary rounded-full"></span>
+              <span class="font-label text-xs font-bold uppercase tracking-wider">Systems Online</span>
+            </div>
+          </div>
+          <div>
+            <span class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase block mb-1">Catalog Version</span>
+            <span class="font-body text-[10px] text-outline">PPUK-CATALOG-v4.2.1</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tech data strip -->
+      <div class="mt-auto pt-8 border-t border-outline-variant/20">
+        <div class="space-y-3">
+          <div class="flex justify-between">
+            <span class="font-label text-[10px] text-outline uppercase tracking-widest">Security</span>
+            <span class="font-label text-[10px] text-primary uppercase tracking-widest">SSL-256</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-label text-[10px] text-outline uppercase tracking-widest">Batch Registry</span>
+            <span class="font-label text-[10px] text-primary uppercase tracking-widest">32 ACTIVE</span>
+          </div>
+          <div class="font-body text-[10px] text-outline mt-2">SYS_ID: 882-XQ-CLINICAL<span class="blink">_</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Content Area -->
+    <div class="p-12 md:w-7/12 flex flex-col justify-center relative">
+      <div class="mb-10">
+        <div class="flex items-baseline gap-4 mb-5">
+          <h1 class="font-headline font-extrabold text-8xl tracking-tighter text-primary leading-none relative">
+            18+
+            <span class="glitch-layer font-headline font-extrabold text-8xl tracking-tighter leading-none" aria-hidden="true">18+</span>
+          </h1>
+          <span class="font-label text-sm font-bold tracking-widest border ghost-border px-3 py-1 bg-primary text-on-primary uppercase">RESTRICTED</span>
+        </div>
+        <h2 class="font-headline font-bold text-3xl md:text-4xl tracking-tighter text-primary uppercase leading-none mb-6">
+          RESEARCH<br/>PURPOSES ONLY
+        </h2>
+        <p class="font-body text-on-surface-variant text-sm leading-relaxed max-w-md">
+          This website and the products contained herein are strictly for <span class="text-primary font-medium">laboratory research use only</span>. By entering this site, you certify that you are over the age of 18 and reside in the United Kingdom. Products are not for human consumption, medical use, or veterinary application.
+        </p>
+      </div>
+
+      <!-- Action Cluster -->
+      <div class="flex flex-col sm:flex-row gap-4 mb-10">
+        <a href="homepage.html" class="liquid-chrome text-on-primary font-label font-bold text-xs uppercase tracking-widest px-10 py-5 hover:opacity-90 transition-opacity text-center">
+          Enter Laboratory
+        </a>
+        <a href="https://google.com" class="ghost-border bg-transparent text-primary font-label font-bold text-xs uppercase tracking-widest px-10 py-5 hover:bg-surface-bright transition-all duration-300 text-center">
+          Exit Portal
+        </a>
+      </div>
+
+      <!-- Technical Footer -->
+      <div class="pt-8 border-t border-outline-variant/20">
+        <div class="grid grid-cols-2 gap-8">
+          <div>
+            <span class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase block mb-1">Legal Compliance</span>
+            <p class="font-body text-[10px] text-outline leading-tight">Subject to UK Chemical Handling Regulations 2024. All transactions monitored.</p>
+          </div>
+          <div>
+            <span class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase block mb-1">Authorization Protocol</span>
+            <p class="font-body text-[10px] text-outline leading-tight">Access limited to verified professional research personnel only.</p>
+          </div>
+        </div>
+        <div class="mt-6 font-body text-[10px] text-outline/40 uppercase tracking-widest">
+          PPUK · <a href="https://performancepeptideuk.com" class="hover:text-outline transition-colors">PERFORMANCEPEPTIDEUK.COM</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Version badge -->
+<div class="fixed bottom-0 left-0 p-10 z-20 pointer-events-none">
+  <div class="flex items-center gap-4">
+    <div class="w-10 h-[1px] bg-outline-variant/50"></div>
+    <span class="font-label text-[10px] tracking-[0.3em] uppercase text-on-surface-variant/40">Clinical Brutalism v2.0 · 2026</span>
+  </div>
+</div>
+
+<div class="fixed bottom-0 right-0 p-10 z-20 pointer-events-none">
+  <div class="flex items-center gap-3">
+    <span class="font-label text-[10px] tracking-[0.3em] uppercase text-on-surface-variant/40">AUTH ID: PPUK-092-B</span>
+    <div class="w-10 h-[1px] bg-outline-variant/50"></div>
+  </div>
+</div>
+
+</body>
+</html>
